@@ -1,0 +1,21 @@
+Package: bertopicr
+Title: Topic Modeling Package
+Version: 0.1.0
+Authors@R: 
+    person("Teodor", "Petrič", , "teodor.petric@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4397-9365"))
+Description: A package to perform topic modeling and visualize results using BERTopic and other tools in R.
+Imports: 
+    dplyr,
+    tidyr,
+    purrr,
+    utils,
+    reticulate,
+    tibble,
+    htmltools,
+    readr,
+    rlang
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2

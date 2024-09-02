@@ -1,0 +1,9 @@
+bertopic
+keybert
+numpy
+scikit-learn
+umap-learn
+hdbscan
+spacy
+plotly
+pandas
