@@ -146,10 +146,10 @@ The package also provides functions for visualizing topics over time, distributi
 
 ```r
 # Visualize topics over time
-visualize_topics_over_time(topic_model, timestamps)
+visualize_topics_over_time(topic_model, topics_over_time, timestamps)
 
 # Visualize topic distribution
-visualize_distribution(topic_model)
+visualize_distribution(topic_model, text_id = 1, probabilities = probs)
 
 # Visualize hierarchical structure of topics
 visualize_hierarchy(topic_model)
