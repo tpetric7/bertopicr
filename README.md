@@ -116,6 +116,7 @@ Once the package and Python environment are set up, you can use the following fu
 ```r
 # Example usage
 library(bertopicr)
+library(dplyr)
 
 url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-18/chocolate.csv"
 chocolate <- readr::read_csv(url)
@@ -129,7 +130,7 @@ df <- data.frame(Text = texts)
 topic_model <- run_bertopic(texts)
 
 topic_results <- df |> 
-  mutate(Topic = topics, 
+  dplyr::mutate(Topic = topics, 
          Probability = apply(probs, 1, max))
 
 # Display the topics
