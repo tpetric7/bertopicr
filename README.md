@@ -77,20 +77,35 @@ Using the `reticulate` package, you can dynamically manage and interface with Py
 #' @param texts A character vector of text documents.
 #' @return A BERTopic model object.
 #' @export
-run_bertopic <- function(texts) {
+  use_python("c:/Users/teodo/anaconda3/envs/bertopic", required = TRUE)
+  reticulate::py_config()
+  reticulate::py_available()
+
+  run_bertopic <- function(texts) {
   library(reticulate)
+  use_python("c:/Users/teodo/anaconda3/envs/bertopic", required = TRUE)
   
   # Import necessary Python modules
   bertopic <- import("bertopic")
+  BERTopic <- bertopic$BERTopic
   np <- import("numpy")
+  sentence_transformers <- import("sentence_transformers")
+  SentenceTransformer <- sentence_transformers$SentenceTransformer
+  
+  # Embeddings
+  embedding_model = SentenceTransformer("BAAI/bge-m3")
+  embeddings = embedding_model$encode(texts, show_progress_bar=TRUE)
   
   # Initialize BERTopic model
-  model <- bertopic$BERTopic()
+  topic_model <- BERTopic(embedding_model = embedding_model, 
+                          calculate_probabilities = TRUE)
   
   # Fit the model on the text data
-  topic_model <- model$fit_transform(texts)
+  fit_transform <- topic_model$fit_transform(texts, embeddings)
+  topics <- fit_transform[[1]]
+  probs <- fit_transform[[2]]
   
-  return(topic_model)
+  return(c(topics, probs))
 }
 ```
 
@@ -104,14 +119,23 @@ Once the package and Python environment are set up, you can use the following fu
 # Example usage
 library(bertopicr)
 
+url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-18/chocolate.csv"
+chocolate <- readr::read_csv(url)
+
 # Sample text data
-texts <- c("This is the first document.", "This is the second document.")
+texts <- chocolate$most_memorable_characteristics
+
+df <- data.frame(Text = texts)
 
 # Run BERTopic on the text data
 topic_model <- run_bertopic(texts)
 
+topic_results <- df |> 
+  mutate(Topic = topics, 
+         Probability = apply(probs, 1, max))
+
 # Display the resulting topic model
-print(topic_model)
+topic_results
 ```
 
 This example shows how to use the `run_bertopic()` function to fit a BERTopic model to a set of text documents.
