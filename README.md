@@ -132,7 +132,7 @@ topic_results <- df |>
   mutate(Topic = topics, 
          Probability = apply(probs, 1, max))
 
-# Display the resulting topic model
+# Display the topics
 topic_results
 ```
 
