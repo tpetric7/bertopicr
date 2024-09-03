@@ -1,4 +1,5 @@
 ```markdown
+
 # bertopicr
 
 Topic modeling tools in R using the reticulate library as interface to the Python package BERTopic
@@ -12,7 +13,7 @@ This package provides tools for performing topic modeling using the BERTopic mod
 To install the package from GitHub, use the following command in R:
 
 ```r
-devtools::install_github("your-username/MyTopicModelingPackage")
+devtools::install_github("tpetric7/bertopicr")
 ```
 
 Ensure that you have the `devtools` package installed. If not, you can install it using:
