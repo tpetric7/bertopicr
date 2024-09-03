@@ -4,7 +4,7 @@ Topic modeling tools in R using the reticulate library as interface to the Pytho
 
 ## Introduction
 
-This package provides tools for performing topic modeling using the BERTopic model, integrated into R through the `reticulate` package. It includes functions for visualization and analysis of topic modeling results, making it easier to understand and explore topics within text data.
+The package `bertopicr` is based on the Python package `BERTopic` by Maarten Grootendorst (https://github.com/MaartenGr/BERTopic) and provides tools for performing topic modeling using the `BERTopic` model, integrated into `R` through the `reticulate` package. It includes functions for visualization and analysis of topic modeling results, making it easier to understand and explore topics within text data.
 
 ## Installation
 
