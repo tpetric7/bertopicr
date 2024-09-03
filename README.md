@@ -163,16 +163,3 @@ Please ensure that your code follows the style and guidelines of the package, an
 This package is licensed under the MIT License. You are free to use, modify, and distribute this software, provided that proper attribution is given to the original author.
 
 ```
-
-### Explanation
-
-- **Introduction**: Provides a brief overview of the package and its purpose.
-- **Installation**: Instructions for installing the R package from GitHub, including installing the `devtools` package if necessary.
-- **Setting Up the Python Environment**: Step-by-step instructions for setting up a Python environment, creating and activating a virtual environment, installing Python packages, and running the setup function in R.
-- **Handling Python Dependencies with `reticulate`**: Explanation of how to handle Python dependencies using the `reticulate` package, with an example function to demonstrate interfacing R with Python.
-- **Basic Usage**: Simple example of how to use the main functionality of the package after installation and setup.
-- **Advanced Usage**: Provides additional examples and information on more advanced features of the package, including visualization functions and custom functions.
-- **Contributing**: Guidelines for how others can contribute to the package, encouraging community collaboration.
-- **License**: Information about the licensing of the package, specifying that it is open-source under the MIT License.
-
-This structure ensures that users have all the necessary information to install, set up, and use your package effectively, as well as contribute to its development if they wish.
