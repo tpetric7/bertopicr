@@ -77,14 +77,12 @@ Using the `reticulate` package, you can dynamically manage and interface with Py
 #' @param texts A character vector of text documents.
 #' @return A BERTopic model object.
 #' @export
-  use_python("c:/Users/teodo/anaconda3/envs/bertopic", required = TRUE)
+  run_bertopic <- function(texts) {
+  library(reticulate)
+  use_python("path/to/your/python/env/r-bertopic", required = TRUE)
   reticulate::py_config()
   reticulate::py_available()
 
-  run_bertopic <- function(texts) {
-  library(reticulate)
-  use_python("c:/Users/teodo/anaconda3/envs/bertopic", required = TRUE)
-  
   # Import necessary Python modules
   bertopic <- import("bertopic")
   BERTopic <- bertopic$BERTopic
