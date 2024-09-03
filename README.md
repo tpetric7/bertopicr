@@ -1,5 +1,3 @@
-```markdown
-
 # bertopicr
 
 Topic modeling tools in R using the reticulate library as interface to the Python package BERTopic
@@ -161,5 +159,3 @@ Please ensure that your code follows the style and guidelines of the package, an
 ## License
 
 This package is licensed under the MIT License. You are free to use, modify, and distribute this software, provided that proper attribution is given to the original author.
-
-```
