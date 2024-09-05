@@ -10,14 +10,14 @@ format:
 editor: source
 ---
 
-The package `bertopicr` is based on the Python package `BERTopic` by Maarten Grootendorst (https://github.com/MaartenGr/BERTopic). The package `bertopicr` introduces functions to display topic model results of `BERTopic` models in `R`. The R package and the tutorial were created by using the programming advice of `OpenAI`'s language model `GPT4o`. 
+The package `bertopicr` is based on the Python package `BERTopic` by Maarten Grootendorst (https://github.com/MaartenGr/BERTopic), which is described in his paper:
 
-<!-- @article{grootendorst2022bertopic, -->
-<!--   title={BERTopic: Neural topic modeling with a class-based TF-IDF procedure}, -->
-<!--   author={Grootendorst, Maarten}, -->
-<!--   journal={arXiv preprint arXiv:2203.05794}, -->
-<!--   year={2022} -->
-<!-- } -->
+> **BERTopic: Neural topic modeling with a class-based TF-IDF procedure**  
+> Maarten Grootendorst, 2022.  
+> Available at: [arXiv:2203.05794](https://arxiv.org/abs/2203.05794)
+
+The package `bertopicr` introduces functions to display topic model results of `BERTopic` models in `R`. The `R` package and the tutorial were created by using the programming advice of `OpenAI`'s language model `GPT4o`. 
+
 
 ## Env & Packages
 

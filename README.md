@@ -6,6 +6,17 @@ Topic modeling tools in `R` using the `reticulate` library as an interface to th
 
 The package `bertopicr` is based on the Python package `BERTopic` by *Maarten Grootendorst* (https://github.com/MaartenGr/BERTopic) and provides tools for performing unsupervised topic modeling. Topic modeling is a method for discovering the abstract "topics" that occur in a collection of documents. This package integrates `BERTopic` into `R` through the `reticulate` package, allowing seamless R-Python interoperability. It includes functions for visualization and analysis of topic modeling results, making it easier to explore topics within text data.
 
+The `Python` package `BERTopic` is described in the paper: 
+
+```bibtex
+@article{grootendorst2022bertopic,
+  title={BERTopic: Neural topic modeling with a class-based TF-IDF procedure},
+  author={Grootendorst, Maarten},
+  journal={arXiv preprint arXiv:2203.05794},
+  year={2022}
+}
+```
+
 ## Installation
 
 To install the package from `GitHub`, use the following command in `R`:
