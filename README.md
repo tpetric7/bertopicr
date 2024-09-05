@@ -89,6 +89,13 @@ devtools::install_github("tpetric7/bertopicr")
     pip install -r requirements.txt
     ```
 
+    If your computer has a suitable GPU, it is recommended to install the `CUDA` version of `pytorch` in order to substantially accelerate processing. 
+    For Windows (https://pytorch.org/get-started/locally/):
+    
+    ```bash
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    ```
+
     Make sure to upgrade `pip` if necessary:
 
     ```bash
