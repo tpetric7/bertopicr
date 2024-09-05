@@ -40,7 +40,7 @@ library(arrow)
 
 # interface with Python
 library(reticulate)
-use_python("c:/Users/teodo/anaconda3/envs/bertopic", required = TRUE)
+use_python("path/to/your/python/env/bertopic", required = TRUE)
 reticulate::py_config()
 reticulate::py_available()
 
@@ -58,7 +58,7 @@ The German texts are in the *text_clean* column. They were segmented into smalle
 # Find the path
 # parquet_path <- system.file("data", "spiegel_sample.parquet", package = "bertopicr")
 # stopwords_path <- system.file("data", "all_stopwords.txt", package = "bertopicr")
-parquet_path <- file.path("../inst/extdata", "spiegel_sample.parquet")
+parquet_path <- file.path("inst/extdata", "spiegel_sample.parquet")
 
 # Read the parquet file using the correct path
 library(arrow)
@@ -71,7 +71,7 @@ dim(dataset)
 The collected `stopword` list includes German and English tokens and will be inserted into `Python`'s `CountVectorizer` before `c-TF-IDF` calculation. The language model will be fed with the text chunks in the *text_clean* column before `stopword` removal.
 
 ```{r}
-stopwords_path <- file.path("../inst/extdata", "all_stopwords.txt")
+stopwords_path <- file.path("inst/extdata", "all_stopwords.txt")
 all_stopwords <- read_lines(stopwords_path)
 ```
 
