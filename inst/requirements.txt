@@ -7,3 +7,5 @@ hdbscan
 spacy
 plotly
 pandas
+openai
+ollama

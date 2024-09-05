@@ -128,7 +128,7 @@ datetime <- import("datetime")
 py <- import_builtins()
 sentence_transformers <- import("sentence_transformers")
 SentenceTransformer <- sentence_transformers$SentenceTransformer
-embedding_model = SentenceTransformer("BAAI/bge-m3")
+embedding_model = SentenceTransformer("BAAI/bge-m3") # for multiple languages
 embeddings = embedding_model$encode(texts_cleaned, show_progress_bar=TRUE)
 
 ```
@@ -198,14 +198,17 @@ topic: <topic label>
 "
 
 # download an appropriate local LLM for your computer with ollama/lm-studio
+# e.g., insert in your terminal 'ollama pull llama3.1'
 openai_model <- bertopic$representation$OpenAI(client, 
-                                               model = "llama3.1:8b-instruct-fp16",
+                                               model = "llama3.1", 
+                                               # model = "llama3.1:8b-instruct-fp16",
                                                exponential_backoff = TRUE, 
                                                chat = TRUE, 
                                                prompt = prompt)
 
-# downlaod a spacy language model from spacy.io before use here
-pos_model <- bertopic$representation$PartOfSpeech("de_core_news_lg")
+# downlaod a spacy language model from spacy.io suitable for your computer 
+# before usage insert in your terminal 'python -m spacy download de_core_news_md'
+pos_model <- bertopic$representation$PartOfSpeech("de_core_news_md")
 # diversity set relatively high to reduce repetition of keyword word forms
 mmr_model <- bertopic$representation$MaximalMarginalRelevance(diversity = 0.5)
 
