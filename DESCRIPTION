@@ -1,6 +1,6 @@
 Package: bertopicr
 Title: Topic Modeling Package
-Version: 0.1.0
+Version: 0.3.0
 Authors@R: 
     person("Teodor", "Petrič", , "teodor.petric@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4397-9365"))
