@@ -40,7 +40,8 @@ library(arrow)
 
 # interface with Python
 library(reticulate)
-use_python("path/to/your/python/env/bertopic", required = TRUE)
+# use_python("path/to/your/python/env/bertopic", required = TRUE)
+use_python("~/anaconda3/envs/bertopic", required = TRUE)
 reticulate::py_config()
 reticulate::py_available()
 
@@ -364,6 +365,7 @@ rep_docs <- get_most_representative_docs(df = df_docs,
 unique(rep_docs)
 ```
 
+
 ### Topic information
 
 The function `get_topic_info_df()` creates another useful data frame, which for each of the extracted topics shows the number of associated documents (or text chunks), topic id (Name), characeristic keywords according to the chosen representation models and three (concatenated) representative documents.
@@ -381,7 +383,7 @@ The `get_topics_df()` function concentrates on the words associated with a certa
 
 ```{r}
 topics_df <- get_topics_df(model = topic_model)
-head(topics_df, 10)
+head(topics_df, 30)
 ```
 
 ### Topic Barchart
@@ -390,8 +392,31 @@ The `visualize_barchart()` creates an interactive barchart with the top five wor
 
 ```{r}
 visualize_barchart(model = topic_model, 
-                   filename = "topics_topwords_interactive_barchart.html", # default
+                   filename = "topics_topwords_interactive_barchart", # default
                    open_file = FALSE) # TRUE enables output in browser
+```
+
+
+We might prefer to create an easy customizable barchart with the `ggplot2` package by using the dataframe extracted by the `get_topics_df()` function and run the `plotly` library in `R` with the `ggplotly()` function for an interactive barchart.
+
+```{r}
+#| eval: false
+
+library(ggplot2)
+
+barchart <- topics_df |> 
+  group_by(Topic) |> 
+  filter(Topic >= 0 & Topic <= 8) |> 
+  slice_head(n=5) |> 
+  mutate(Topic = paste("Topic", as.character(Topic)), 
+         Word = reorder(Word, Score)) |> 
+  ggplot(aes(Score, Word, fill = Topic)) +
+  geom_col() +
+  facet_wrap(~ Topic, scales = "free") +
+  theme(legend.position = "none")
+
+library(plotly)
+ggplotly(barchart)
 ```
 
 
@@ -432,17 +457,32 @@ The `visualize_distribution()` function produces an interactive barchart that di
 # default filename: topic_dist_interactive.html
 visualize_distribution(model = topic_model, 
                        text_id = 1, # user input
-                       probabilities = probs) # see model training
+                       probabilities = probs, # see model training
+                       filename = "topic_dist_interactive", # default name
+                       auto_open = FALSE) # TRUE enables output in browser 
+
 ```
 
 
 ### Intertopic Distance Map
 
-The semantic relatedness can be displayed with the `visualize_topics()` function. 
+The semantic relatedness of topics can be displayed with the `visualize_topics()` function. 
 
 ```{r}
 visualize_topics(model = topic_model, 
-                 filename = "intertopic_distance_map") # default name
+                 filename = "intertopic_distance_map", # default name
+                 auto_open = FALSE) # TRUE enables output in browser
+```
+
+
+### Topic Similarity
+
+We can create a `similarity matrix` by applying cosine similarities through the generated topic embeddings. The resulting matrix indicates how similar topics are to each other. To visualize the similarity matrix we can use the `visualize_heatmap()` function. 
+
+```{r}
+visualize_heatmap(model = topic_model, 
+                  filename = "topics_similarity_heatmap", 
+                  auto_open = FALSE)
 ```
 
 
@@ -483,6 +523,22 @@ visualize_documents(model = topic_model,
                     auto_open = FALSE) # TRUE enables output in browser
 ```
 
+To create an interactive 3D plot, the visualize_documents_3d function can be used.
+
+```{r}
+# Reduce dimensionality of embeddings using UMAP
+reduced_embeddings <- umap$UMAP(n_neighbors = 10L, n_components = 3L, min_dist = 0.0, metric = 'cosine')$fit_transform(embeddings)
+
+visualize_documents_3d(model = topic_model, 
+                       texts = texts_cleaned, 
+                       reduced_embeddings = reduced_embeddings, 
+                       custom_labels = FALSE, # default
+                       hide_annotation = TRUE, # default
+                       tooltips = c("Topic", "Name", "Probability", "Text"), # deault
+                       filename = "visualize_documents_3d", # default name
+                       auto_open = FALSE) # TRUE enables output in browser
+```
+
 
 ### Topic Development
 
@@ -507,8 +563,8 @@ topics_per_class = topic_model$topics_per_class(texts_cleaned, classes=classes)
 
 visualize_topics_per_class(model = topic_model, 
                            topics_per_class = topics_per_class,
-                           start = 0, # default
-                           end = 10, # default
+                           start = 0, # default class
+                           end = 10, # default class
                            filename = "topics_per_class", # default, html extension 
                            auto_open = FALSE) # TRUE enables output in browser
 ```

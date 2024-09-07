@@ -6,7 +6,7 @@
 \usage{
 visualize_barchart(
   model,
-  filename = "topics_topwords_interactive_barchart.html",
+  filename = "topics_topwords_interactive_barchart",
   open_file = FALSE
 )
 }
@@ -14,9 +14,10 @@ visualize_barchart(
 \item{model}{A BERTopic model object. Must be passed from the calling environment.}
 
 \item{filename}{A character string specifying the name of the HTML file to save the bar chart.
-Default is "topics_topwords_interactive_barchart.html".}
+Default is "topics_topwords_interactive_barchart".
+The \code{.html} extension is added automatically if not provided.}
 
-\item{open_file}{Logical. If TRUE, opens the HTML file after saving. Default is TRUE.}
+\item{open_file}{Logical. If TRUE, opens the HTML file after saving. Default is FALSE.}
 }
 \value{
 Displays the interactive bar chart within the R environment and saves it as an HTML file.
@@ -27,7 +28,7 @@ as an interactive HTML file. It checks for required Python modules and allows fo
 }
 \examples{
 \dontrun{
-visualize_barchart(model = topic_model, filename = "custom_barchart.html",
+visualize_barchart(model = topic_model, filename = "custom_barchart",
 open_file = TRUE)
 }
 }

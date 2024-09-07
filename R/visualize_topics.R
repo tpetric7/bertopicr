@@ -6,15 +6,17 @@
 #' @param model A BERTopic model object. The model must have the method \code{visualize_topics}.
 #' @param filename A character string specifying the name of the HTML file to save the visualization.
 #'                 The default value is "intertopic_distance_map". The filename should not contain illegal characters.
+#'                 The `.html` extension is added automatically if not provided.
+#' @param auto_open Logical. If TRUE, opens the HTML file after saving. Default is FALSE.
 #' @return The function does not return a value but saves an HTML file containing the visualization
 #'         and displays it in the current R environment.
 #' @export
 #' @examples
 #' \dontrun{
 #' # Assuming 'topic_model' is a BERTopic model object
-#' visualize_topics(model = topic_model, filename = "plot")
+#' visualize_topics(model = topic_model, filename = "plot", auto_open = TRUE)
 #' }
-visualize_topics <- function(model, filename = "intertopic_distance_map") {
+visualize_topics <- function(model, filename = "intertopic_distance_map", auto_open = FALSE) {
 
   # Error handling for required packages
   if (!requireNamespace("reticulate", quietly = TRUE)) {
@@ -30,12 +32,6 @@ visualize_topics <- function(model, filename = "intertopic_distance_map") {
   }
 
   # Import Python modules using reticulate
-  bertopic <- tryCatch({
-    reticulate::import("bertopic")
-  }, error = function(e) {
-    stop("Failed to import bertopic Python module. Ensure that bertopic is installed in your Python environment.")
-  })
-
   plotly <- tryCatch({
     reticulate::import("plotly")
   }, error = function(e) {
@@ -49,6 +45,11 @@ visualize_topics <- function(model, filename = "intertopic_distance_map") {
 
   # Ensure the filename has no illegal characters for file naming
   filename <- gsub("[^[:alnum:]_]", "_", filename)
+
+  # Ensure the filename has the .html extension
+  if (!grepl("\\.html$", filename)) {
+    filename <- paste0(filename, ".html")
+  }
 
   # Validate the model object by checking for the required method
   if (!"visualize_topics" %in% names(model)) {
@@ -64,14 +65,14 @@ visualize_topics <- function(model, filename = "intertopic_distance_map") {
 
   # Save the figure as an HTML file
   tryCatch({
-    plotly$offline$plot(fig, filename = paste0(filename, ".html"), auto_open = FALSE)
+    plotly$offline$plot(fig, filename = filename, auto_open = auto_open)
   }, error = function(e) {
     stop("Failed to save the plot as an HTML file: ", e$message)
   })
 
   # Read the HTML file content as a single string
   html_content <- tryCatch({
-    readr::read_file(paste0(filename, ".html"))
+    readr::read_file(filename)
   }, error = function(e) {
     stop("Failed to read the saved HTML file: ", e$message)
   })
@@ -85,5 +86,4 @@ visualize_topics <- function(model, filename = "intertopic_distance_map") {
 }
 
 # Example usage
-# Assuming 'topic_model' is a BERTopic model object
-# visualize_topics(model = topic_model, filename = "plot")
+# visualize_topics(model = topic_model, filename = "plot", auto_open = TRUE)

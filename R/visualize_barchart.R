@@ -5,23 +5,29 @@
 #'
 #' @param model A BERTopic model object. Must be passed from the calling environment.
 #' @param filename A character string specifying the name of the HTML file to save the bar chart.
-#'                 Default is "topics_topwords_interactive_barchart.html".
-#' @param open_file Logical. If TRUE, opens the HTML file after saving. Default is TRUE.
+#'                 Default is "topics_topwords_interactive_barchart".
+#'                 The `.html` extension is added automatically if not provided.
+#' @param open_file Logical. If TRUE, opens the HTML file after saving. Default is FALSE.
 #' @return Displays the interactive bar chart within the R environment and saves it as an HTML file.
 #' @importFrom reticulate import
 #' @importFrom readr read_file
 #' @importFrom htmltools HTML browsable
 #' @examples
 #' \dontrun{
-#' visualize_barchart(model = topic_model, filename = "custom_barchart.html",
+#' visualize_barchart(model = topic_model, filename = "custom_barchart",
 #' open_file = TRUE)
 #' }
 #' @export
-visualize_barchart <- function(model, filename = "topics_topwords_interactive_barchart.html", open_file = FALSE) {
+visualize_barchart <- function(model, filename = "topics_topwords_interactive_barchart", open_file = FALSE) {
 
   # Error handling for model input
   if (missing(model)) {
     stop("A BERTopic model must be provided.")
+  }
+
+  # Ensure the filename has the .html extension
+  if (!grepl("\\.html$", filename)) {
+    filename <- paste0(filename, ".html")
   }
 
   # Import necessary Python modules using reticulate
@@ -71,5 +77,5 @@ visualize_barchart <- function(model, filename = "topics_topwords_interactive_ba
 
 # # Example usage
 # viz <- visualize_barchart(model = topic_model,
-#                           filename = "custom_barchart.html",
+#                           filename = "custom_barchart",
 #                           open_file = TRUE)

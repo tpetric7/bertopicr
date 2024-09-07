@@ -4,13 +4,20 @@
 \alias{visualize_topics}
 \title{Visualize Topics using BERTopic}
 \usage{
-visualize_topics(model, filename = "intertopic_distance_map")
+visualize_topics(
+  model,
+  filename = "intertopic_distance_map",
+  auto_open = FALSE
+)
 }
 \arguments{
 \item{model}{A BERTopic model object. The model must have the method \code{visualize_topics}.}
 
 \item{filename}{A character string specifying the name of the HTML file to save the visualization.
-The default value is "intertopic_distance_map". The filename should not contain illegal characters.}
+The default value is "intertopic_distance_map". The filename should not contain illegal characters.
+The \code{.html} extension is added automatically if not provided.}
+
+\item{auto_open}{Logical. If TRUE, opens the HTML file after saving. Default is FALSE.}
 }
 \value{
 The function does not return a value but saves an HTML file containing the visualization
@@ -23,6 +30,6 @@ The visualization is saved as an interactive HTML file, which can be opened and 
 \examples{
 \dontrun{
 # Assuming 'topic_model' is a BERTopic model object
-visualize_topics(model = topic_model, filename = "plot")
+visualize_topics(model = topic_model, filename = "plot", auto_open = TRUE)
 }
 }

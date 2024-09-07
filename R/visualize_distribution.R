@@ -8,6 +8,9 @@
 #'                Must be a positive integer and a valid index within the \code{probabilities} matrix.
 #' @param probabilities A matrix or data frame of topic probabilities, with rows corresponding to documents and columns to topics.
 #'                      Each element represents the probability of a topic for a given document.
+#' @param filename A character string specifying the name of the HTML file to save the visualization. Default is "topic_dist_interactive".
+#'                 The .html extension will be added automatically.
+#' @param auto_open Logical. If TRUE, the HTML file will automatically open in the browser. Default is FALSE.
 #' @return The function does not return a value but saves an HTML file containing the visualization
 #'         and displays it in the current R environment.
 #' @importFrom reticulate import
@@ -17,9 +20,14 @@
 #' @examples
 #' \dontrun{
 #' # Assuming 'topic_model' is a BERTopic model object and 'probs' is a matrix of topic probabilities
-#' visualize_distribution(model = topic_model, text_id = 1, probabilities = probs)
+#' visualize_distribution(
+#'   model = topic_model,
+#'   text_id = 1,
+#'   probabilities = probs,
+#'   filename = "custom_filename",
+#'   auto_open = TRUE)
 #' }
-visualize_distribution <- function(model, text_id = 1, probabilities) {
+visualize_distribution <- function(model, text_id = 1, probabilities, filename = "topic_dist_interactive", auto_open = FALSE) {
 
   # Import Python modules using reticulate
   plotly <- tryCatch({
@@ -65,6 +73,11 @@ visualize_distribution <- function(model, text_id = 1, probabilities) {
     stop("Failed to convert topic distribution to a numpy array: ", e$message)
   })
 
+  # Ensure the filename has the .html extension
+  if (!grepl("\\.html$", filename)) {
+    filename <- paste0(filename, ".html")
+  }
+
   # Visualize the topic-document distribution for the specified document
   fig <- tryCatch({
     model$visualize_distribution(topic_distr_np, min_probability = 0.0)
@@ -74,7 +87,7 @@ visualize_distribution <- function(model, text_id = 1, probabilities) {
 
   # Save the figure as an HTML file
   tryCatch({
-    plotly$offline$plot(fig, filename = "topic_dist_interactive.html", auto_open = FALSE)
+    plotly$offline$plot(fig, filename = filename, auto_open = auto_open)
   }, error = function(e) {
     stop("Failed to save the plot as an HTML file: ", e$message)
   })
@@ -90,7 +103,7 @@ visualize_distribution <- function(model, text_id = 1, probabilities) {
 
   # Read the HTML file content as a single string
   html_content <- tryCatch({
-    readr::read_file("topic_dist_interactive.html")
+    readr::read_file(filename)
   }, error = function(e) {
     stop("Failed to read the saved HTML file: ", e$message)
   })
@@ -104,5 +117,8 @@ visualize_distribution <- function(model, text_id = 1, probabilities) {
 }
 
 # # Example usage
-# # Assuming 'topic_model' is a BERTopic model object and 'probs' is a matrix of topic probabilities
-# visualize_distribution(model = topic_model, text_id = 1, probabilities = probs)
+# visualize_distribution(model = topic_model,
+#                        text_id = 1,
+#                        probabilities = probs,
+#                        filename = "custom_filename",
+#                        auto_open = TRUE)
