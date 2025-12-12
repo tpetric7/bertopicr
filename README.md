@@ -1,6 +1,6 @@
 # bertopicr
 
-Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem. Provides helpers for topic inspection and visualization; see the Quarto notebook for an end-to-end training workflow.
+Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the [Quarto notebook](inst/extdata/topics_spiegel.qmd) and the vignettes for an end-to-end training workflow.
 
 <p align="center">
   <img src="inst/extdata/visualize_documents.png" alt="Visualize topics in the documents" width="720" />
@@ -85,7 +85,7 @@ visualize_distribution(model, text_id = 1, probabilities = probs, auto_open = FA
 
 ## Advanced example
 
-See the Quarto tutorial for a complete workflow (training, represenations models [keyBERT, ollama models, ...], dimensionality reduction, clustering, and visualizations): `topics_spiegel.qmd` (source) and `topics__spiegel.html` (rendered).
+See the vignettes or the [Quarto tutorial](inst/extdata/topics_spiegel.qmd) and the[HTML document](inst/extdata/topics__spiegel.html) for a complete workflow (training, represenations models [keyBERT, ollama models, ...], dimensionality reduction, clustering, and visualizations).
 
 ## Sample visualizations
 
