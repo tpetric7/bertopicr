@@ -1,44 +1,14 @@
 ---
 title: "Topic Modeling with BERTopic in R using reticulate and local LLMs"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Topic Modeling with BERTopic in R using reticulate and local LLMs}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+author: "Teodor Petrič"
+date: "`r Sys.Date()`"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+editor: source
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(reticulate)
-
-# 1. Define the libraries you need
-required_modules <- c("bertopic", "umap", "hdbscan", "sklearn", "numpy", "plotly", "datetime", "sentence_transformers", "openai", "ollama")
-
-# 2. Check if they are installed
-python_ready <- tryCatch({
-  # Attempt to initialize python and check modules
-  py_available(initialize = TRUE) && 
-  all(vapply(required_modules, py_module_available, logical(1)))
-}, error = function(e) FALSE)
-
-# 3. If missing, tell Knitr to SKIP all code chunks
-if (!python_ready) {
-  knitr::opts_chunk$set(eval = FALSE)
-  message("Warning: Required Python modules (bertopic, umap-learn) not found. Vignette code will not run.")
-}
-```
-
-## View Pre-Computed Results
-
-**Note:** The code below requires a specific Python environment. 
-If you simply want to view the full tutorial with all interactive graphs and results, 
-run the following command in R:
-
-```{r}
-# Open the pre-computed HTML tutorial in your browser
-browseURL(system.file("extdata", "topics__spiegel.html", package = "bertopicr"))
-```
-
 
 The package `bertopicr` is based on the Python package `BERTopic` by Maarten Grootendorst (https://github.com/MaartenGr/BERTopic), which is described in his paper:
 
@@ -70,16 +40,12 @@ library(tictoc)
 library(htmltools)
 
 library(reticulate)
-```{r setup-python, include=FALSE}
-library(reticulate)
-
-# Try to find python, but don't crash if it's missing (e.g. on another user's machine)
-if (reticulate::py_available(initialize = TRUE)) {
-  # Python is ready
-} else {
-  # Optional: Fallback or search
-  try(reticulate::use_python(Sys.which("python"), required = FALSE), silent = TRUE)
-}
+# ~ Home, in cmd terminal insert: echo %USERPROFILE%
+userprofile <- Sys.getenv("USERPROFILE")
+use_python(file.path(userprofile, "Documents/R/bertopic/bertopic4r/Scripts", required = TRUE))
+# use_python("path/to/your/python/env/bertopic", required = TRUE)
+# or:
+# use_virtualenv("path/to/your/python/env/bertopic", required = TRUE)
 
 reticulate::py_config()
 reticulate::py_available()
@@ -351,7 +317,9 @@ head(results,10) |> rmarkdown::paged_table()
 
 ```
 
-```{r eval=FALSE}
+```{r}
+#| eval: false
+
 results |>
   saveRDS("inst/extdata/spiegel_topic_results_df.rds", version = 2)
 results |>
@@ -421,8 +389,6 @@ visualize_barchart(model = topic_model,
                    open_file = FALSE) # TRUE enables output in browser
 ```
 
-![](images/topics_topwords_interactive_barchart.png)
-
 We might prefer to create a customizable barchart with the `ggplot2` package by using the dataframe extracted by the `get_topics_df()` function and run the `plotly` library in `R` with the `ggplotly()` function for an interactive barchart. Due to possible conflicts between `R`'s `plotly` library and `Python`'s `plotly` implementation, the interactive barchart below is disabled. 
 
 ```{r}
@@ -484,7 +450,6 @@ visualize_distribution(model = topic_model,
                        probabilities = probs) # see model training
 ```
 
-![](images/topic_dist_interactive.png)
 
 ### Intertopic Distance Map
 
@@ -495,7 +460,6 @@ visualize_topics(model = topic_model,
                  filename = "intertopic_distance_map") # default name
 ```
 
-![](images/intertopic_distance_map.png)
 
 ### Topic Similarity
 
@@ -506,8 +470,6 @@ visualize_heatmap(model = topic_model,
                   filename = "topics_similarity_heatmap", 
                   auto_open = FALSE)
 ```
-
-![](images/topics_similarity_heatmap.png)
 
 
 ### Topic hierarchy
@@ -531,8 +493,6 @@ visualize_hierarchy(model = topic_model,
                     auto_open = FALSE) # TRUE enables output in browser
 ```
 
-![](images/topic_hierarchy.png)
-
 
 ### Visualize Documents
 
@@ -549,8 +509,6 @@ visualize_documents(model = topic_model,
                     auto_open = FALSE) # TRUE enables output in browser
 
 ```
-
-![](images/visualize_documents.png)
 
 After updating to `BERTopic=0.17.0`, you might experience that the `visualize_documents()` function doesn't render the dots in the scatterplot. A simple **temporary fix** is to open the `Python` file `_documents.py` of the `visualize_documents()` function of` BERTopic` (on my `Windows` system it sits in `anaconda3\envs\bertopic\Lib\site-packages\bertopic\plotting\`) and change `go.Scattergl` to `go.Scatter` in the `fig.add_trace()` function (it occurs twice in the `Python` script).
 
@@ -571,7 +529,6 @@ visualize_documents_3d(model = topic_model,
                        auto_open = FALSE) # TRUE enables output in browser
 ```
 
-![](images/visualize_documents_3d.png)
 
 ### Topic Development
 
@@ -584,8 +541,6 @@ visualize_topics_over_time(model = topic_model,
                            top_n_topics = 10, # default is 20
                            filename = "topics_over_time") # default, html extension
 ```
-
-![](images/topics_over_time.png)
 
 
 ### Groups
@@ -603,8 +558,6 @@ visualize_topics_per_class(model = topic_model,
                            filename = "topics_per_class", # default, html extension 
                            auto_open = FALSE) # TRUE enables output in browser
 ```
-
-![](images/topics_per_class.png)
 
 We could also use the `ggplot2` and `plotly` packages in `R` to produce a similar looking customized interactive barchart.
 
@@ -668,6 +621,24 @@ wordcloud2a(
   ellipticity     = 0.65
 )
 
+```
+
+
+```{python}
+# Install packages before running the code
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+def create_wordcloud(model, topic):
+    text = {word: value for word, value in model.get_topic(topic)}
+    wc = WordCloud(background_color="white", max_words=1000)
+    wc.generate_from_frequencies(text)
+    plt.imshow(wc, interpolation="bilinear")
+    plt.axis("off")
+    plt.show()
+
+# Show wordcloud
+create_wordcloud(r.topic_model200, topic=1)
 ```
 
 

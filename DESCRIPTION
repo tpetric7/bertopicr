@@ -25,3 +25,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://tpetric7.github.io/bertopicr/

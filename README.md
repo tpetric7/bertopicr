@@ -1,9 +1,9 @@
 # bertopicr
 
-Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the [Quarto notebook](inst/extdata/topics_spiegel.qmd) and the [vignettes](vignettes/topics_spiegel.Rmd) for an end-to-end training workflow.
+Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the [Quarto notebook](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd) and the [vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd) for an end-to-end training workflow.
 
 <p align="center">
-  <img src="inst/extdata/visualize_documents.png" alt="Visualize topics in the documents" width="720" />
+  <img src="vignettes/images/visualize_documents.png" alt="Visualize topics in the documents" width="720" />
 </p>
 
 ## Installation (R package)
@@ -85,18 +85,18 @@ visualize_distribution(model, text_id = 1, probabilities = probs, auto_open = FA
 
 ## Advanced example
 
-See the [vignettes](doc/topics_spiegel.Rmd) or the [Quarto tutorial](inst/extdata/topics_spiegel.qmd) and the[HTML document](inst/extdata/topics__spiegel.html) for a complete workflow (training, representation models [keyBERT, ollama models, ...], dimensionality reduction, clustering, and visualizations).
+See the [vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd) or the [Quarto tutorial](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd) and the[HTML document](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics__spiegel.html) for a complete workflow (training, representation models [keyBERT, ollama models, ...], dimensionality reduction, clustering, and visualizations).
 
 ## Sample visualizations
 
 <p align="center">
-  <img src="inst/extdata/intertopic_distance_map.png" alt="Intertopic distance map" width="720" />
+  <img src="vignettes/images/intertopic_distance_map.png" alt="Intertopic distance map" width="720" />
 </p>
 <p align="center">
-  <img src="inst/extdata/topics_over_time.png" alt="Topics over time" width="720" />
+  <img src="vignettes/images/topics_over_time.png" alt="Topics over time" width="720" />
 </p>
 <p align="center">
-  <img src="inst/extdata/topics_similarity_heatmap.png" alt="Topics similarity heatmap" width="720" />
+  <img src="vignettes/images/topics_similarity_heatmap.png" alt="Topics similarity heatmap" width="720" />
 </p>
 
 ## Citation
