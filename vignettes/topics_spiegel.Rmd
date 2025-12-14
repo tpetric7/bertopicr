@@ -421,7 +421,7 @@ visualize_barchart(model = topic_model,
                    open_file = FALSE) # TRUE enables output in browser
 ```
 
-![](images/topics_topwords_interactive_barchart.png)
+![topics_topwords_interactive_barchart](images/topics_topwords_interactive_barchart.png)
 
 We might prefer to create a customizable barchart with the `ggplot2` package by using the dataframe extracted by the `get_topics_df()` function and run the `plotly` library in `R` with the `ggplotly()` function for an interactive barchart. Due to possible conflicts between `R`'s `plotly` library and `Python`'s `plotly` implementation, the interactive barchart below is disabled. 
 
@@ -484,7 +484,7 @@ visualize_distribution(model = topic_model,
                        probabilities = probs) # see model training
 ```
 
-![](images/topic_dist_interactive.png)
+![topic_dist_interactive](images/topic_dist_interactive.png)
 
 ### Intertopic Distance Map
 
@@ -495,7 +495,7 @@ visualize_topics(model = topic_model,
                  filename = "intertopic_distance_map") # default name
 ```
 
-![](images/intertopic_distance_map.png)
+![intertopic_distance_map](images/intertopic_distance_map.png)
 
 ### Topic Similarity
 
@@ -507,7 +507,7 @@ visualize_heatmap(model = topic_model,
                   auto_open = FALSE)
 ```
 
-![](images/topics_similarity_heatmap.png)
+![topics_similarity_heatmap](images/topics_similarity_heatmap.png)
 
 
 ### Topic hierarchy
@@ -531,7 +531,7 @@ visualize_hierarchy(model = topic_model,
                     auto_open = FALSE) # TRUE enables output in browser
 ```
 
-![](images/topic_hierarchy.png)
+![topic_hierarchy](images/topic_hierarchy.png)
 
 
 ### Visualize Documents
@@ -550,7 +550,7 @@ visualize_documents(model = topic_model,
 
 ```
 
-![](images/visualize_documents.png)
+![visualize_documents](images/visualize_documents.png)
 
 After updating to `BERTopic=0.17.0`, you might experience that the `visualize_documents()` function doesn't render the dots in the scatterplot. A simple **temporary fix** is to open the `Python` file `_documents.py` of the `visualize_documents()` function of` BERTopic` (on my `Windows` system it sits in `anaconda3\envs\bertopic\Lib\site-packages\bertopic\plotting\`) and change `go.Scattergl` to `go.Scatter` in the `fig.add_trace()` function (it occurs twice in the `Python` script).
 
@@ -571,7 +571,7 @@ visualize_documents_3d(model = topic_model,
                        auto_open = FALSE) # TRUE enables output in browser
 ```
 
-![](images/visualize_documents_3d.png)
+![visualize_documents_3d](images/visualize_documents_3d.png)
 
 ### Topic Development
 
@@ -585,7 +585,7 @@ visualize_topics_over_time(model = topic_model,
                            filename = "topics_over_time") # default, html extension
 ```
 
-![](images/topics_over_time.png)
+![topics_over_time](images/topics_over_time.png)
 
 
 ### Groups
@@ -604,7 +604,7 @@ visualize_topics_per_class(model = topic_model,
                            auto_open = FALSE) # TRUE enables output in browser
 ```
 
-![](images/topics_per_class.png)
+![topics_per_class](images/topics_per_class.png)
 
 We could also use the `ggplot2` and `plotly` packages in `R` to produce a similar looking customized interactive barchart.
 
