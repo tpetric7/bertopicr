@@ -1,6 +1,6 @@
 # bertopicr
 
-Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the [Quarto notebook](inst/extdata/topics_spiegel.qmd) and the [vignettes](doc/topics_spiegel.Rmd) for an end-to-end training workflow.
+Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the [Quarto notebook](inst/extdata/topics_spiegel.qmd) and the [vignettes](vignettes/topics_spiegel.Rmd) for an end-to-end training workflow.
 
 <p align="center">
   <img src="inst/extdata/visualize_documents.png" alt="Visualize topics in the documents" width="720" />
