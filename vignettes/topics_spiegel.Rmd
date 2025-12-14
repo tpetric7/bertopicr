@@ -2,7 +2,7 @@
 title: "Topic Modeling with BERTopic in R using reticulate and local LLMs"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Topic Modeling with BERTopic in R}
+  %\VignetteIndexEntry{Topic Modeling with BERTopic in R using reticulate and local LLMs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
