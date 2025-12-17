@@ -24,5 +24,6 @@ RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown
+Config/Needs/website: pkgdown, rmarkdown, knitr
 VignetteBuilder: knitr
 URL: https://tpetric7.github.io/bertopicr/
