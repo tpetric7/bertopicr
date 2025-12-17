@@ -30,7 +30,8 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install bertopic umap-learn scikit-learn pandas numpy
+          pip install bertopic umap-learn hdbscan scikit-learn sentence-transformers pandas numpy keybert spacy plotly pandas openai ollama
+
       # --------------------------------------------
 
       - uses: r-lib/actions/setup-pandoc@v2
