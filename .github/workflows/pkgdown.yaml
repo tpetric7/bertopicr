@@ -23,17 +23,17 @@ jobs:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
 
-      # --- KLJUČNI POPRAVEK: Namestitev Pythona ---
+      # --- Python moduli ---
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Install Python dependencies
         run: |
-          pip install bertopic umap-learn hdbscan scikit-learn sentence-transformers pandas numpy keybert spacy plotly pandas openai ollama
-
-      # --------------------------------------------
-
+          python -m pip install --upgrade pip
+          # Tu so dodani: hdbscan, safetensors, tokenizers, joblib... da bo mir
+          pip install bertopic umap-learn scikit-learn pandas numpy plotly matplotlib sentence-transformers hdbscan safetensors tokenizers joblib
+      # ---------------------------------------------
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
