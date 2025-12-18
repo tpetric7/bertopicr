@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/202cb46e-b163-4503-ad96-32d2560bea20/deploy-status)](https://app.netlify.com/projects/bertopicr/deploys)
+
 # bertopicr
 
 Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the [Quarto notebook](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd) and the [vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd) for an end-to-end training workflow.
