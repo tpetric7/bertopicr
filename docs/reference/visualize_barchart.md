@@ -1,0 +1,45 @@
+# Visualize BERTopic Bar Chart
+
+This function visualizes the topics of a BERTopic model using Plotly and
+saves the output as an interactive HTML file. It checks for required
+Python modules and allows for custom file naming.
+
+## Usage
+
+``` r
+visualize_barchart(
+  model,
+  filename = "topics_topwords_interactive_barchart",
+  open_file = FALSE
+)
+```
+
+## Arguments
+
+- model:
+
+  A BERTopic model object. Must be passed from the calling environment.
+
+- filename:
+
+  A character string specifying the name of the HTML file to save the
+  bar chart. Default is "topics_topwords_interactive_barchart". The
+  `.html` extension is added automatically if not provided.
+
+- open_file:
+
+  Logical. If TRUE, opens the HTML file after saving. Default is FALSE.
+
+## Value
+
+Displays the interactive bar chart within the R environment and saves it
+as an HTML file.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+visualize_barchart(model = topic_model, filename = "custom_barchart",
+open_file = TRUE)
+} # }
+```
