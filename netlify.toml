@@ -1,0 +1,6 @@
+[build]
+  # Povej Netlifyju, da so pripravljene datoteke v mapi 'docs'
+  publish = "docs"
+
+  # Povej Netlifyju, naj ne zaganja nobenih ukazov za gradnjo
+  command = ""
