@@ -24,6 +24,8 @@
   : Visualize Topic Distribution for a Specific Document using BERTopic
 - [`visualize_documents()`](https://tpetric7.github.io/bertopicr/reference/visualize_documents.md)
   : Visualize Documents in Reduced Embedding Space
+- [`visualize_documents_2d()`](https://tpetric7.github.io/bertopicr/reference/visualize_documents_2d.md)
+  : Visualize Documents in 2D Space using BERTopic
 - [`visualize_documents_3d()`](https://tpetric7.github.io/bertopicr/reference/visualize_documents_3d.md)
   : Visualize Documents in 3D Space using BERTopic
 - [`visualize_heatmap()`](https://tpetric7.github.io/bertopicr/reference/visualize_heatmap.md)

@@ -512,8 +512,23 @@ visualize_documents(model = topic_model,
 
 After updating to `BERTopic=0.17.0`, you might experience that the `visualize_documents()` function doesn't render the dots in the scatterplot. A simple **temporary fix** is to open the `Python` file `_documents.py` of the `visualize_documents()` function of` BERTopic` (on my `Windows` system it sits in `anaconda3\envs\bertopic\Lib\site-packages\bertopic\plotting\`) and change `go.Scattergl` to `go.Scatter` in the `fig.add_trace()` function (it occurs twice in the `Python` script).
 
+The `visualize_documents_2d()` function is a variant of the interactive plot above, but with additional *tooltips*. Set `n_components` = 2L in *reduced_embeddings*! 
 
-To create an interactive 3D plot, the `visualize_documents_3d()` function can be used. This function is not implemented in the `Python` package.
+```{r}
+# Reduce dimensionality of embeddings using UMAP (n_components = 2L !!!)
+reduced_embeddings <- umap$UMAP(n_neighbors = 10L, n_components = 2L, min_dist = 0.0, metric = 'cosine')$fit_transform(embeddings)
+
+visualize_documents_2d(model = topic_model, 
+                       texts = texts_cleaned, 
+                       reduced_embeddings = reduced_embeddings, 
+                       custom_labels = FALSE, # default
+                       hide_annotation = TRUE, # default
+                       tooltips = c("Topic", "Name", "Probability", "Text"), # default
+                       filename = "visualize_documents_2d", # default name
+                       auto_open = FALSE) # TRUE enables output in browser
+```
+
+To create an interactive 3D plot, the `visualize_documents_3d()` function can be used. This function is not implemented in the `Python` package. Set `n_components` = 3L in *reduced_embeddings*!
 
 ```{r}
 # Reduce dimensionality of embeddings using UMAP

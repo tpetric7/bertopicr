@@ -635,10 +635,29 @@ function of`BERTopic` (on my `Windows` system it sits in
 change `go.Scattergl` to `go.Scatter` in the `fig.add_trace()` function
 (it occurs twice in the `Python` script).
 
+The
+[`visualize_documents_2d()`](https://tpetric7.github.io/bertopicr/reference/visualize_documents_2d.md)
+function is a variant of the interactive plot above, but with additional
+*tooltips*. Set `n_components` = 2L in *reduced_embeddings*!
+
+``` r
+# Reduce dimensionality of embeddings using UMAP (n_components = 2L !!!)
+reduced_embeddings <- umap$UMAP(n_neighbors = 10L, n_components = 2L, min_dist = 0.0, metric = 'cosine')$fit_transform(embeddings)
+
+visualize_documents_2d(model = topic_model, 
+                       texts = texts_cleaned, 
+                       reduced_embeddings = reduced_embeddings, 
+                       custom_labels = FALSE, # default
+                       hide_annotation = TRUE, # default
+                       tooltips = c("Topic", "Name", "Probability", "Text"), # default
+                       filename = "visualize_documents_2d", # default name
+                       auto_open = FALSE) # TRUE enables output in browser
+```
+
 To create an interactive 3D plot, the
 [`visualize_documents_3d()`](https://tpetric7.github.io/bertopicr/reference/visualize_documents_3d.md)
 function can be used. This function is not implemented in the `Python`
-package.
+package. Set `n_components` = 3L in *reduced_embeddings*!
 
 ``` r
 # Reduce dimensionality of embeddings using UMAP
@@ -657,6 +676,11 @@ visualize_documents_3d(model = topic_model,
 ![visualize_documents_3d](images/visualize_documents_3d.png)
 
 visualize_documents_3d
+
+The legend of the *updated*
+[`visualize_documents_3d()`](https://tpetric7.github.io/bertopicr/reference/visualize_documents_3d.md)
+function shows the Topic keywords (*Name*) instead of the Topic number
+and includes a few *tooltips*.
 
 ### Topic Development
 
