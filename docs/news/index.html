@@ -36,12 +36,37 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.1" id="bertopicr-031">bertopicr 0.3.1<a class="anchor" aria-label="anchor" href="#bertopicr-031"></a></h2>
-<ul><li>Added <code>.onload()</code> function to allow <code>MacOS</code> users to import <code>BERTopic</code> and other installed <code>Python</code> modules from the virtual environment.</li>
-<li>If you update the <code>Python</code> package <code>BERTopic</code> to version <code>0.17.0</code>, you might have to update other packages as well or (like myself) to create a new virtual environment with compatible packages.</li>
+<h2 class="pkg-version" data-toc-text="0.3.4" id="bertopicr-034">bertopicr 0.3.4<a class="anchor" aria-label="anchor" href="#bertopicr-034"></a></h2>
+<ul><li>The <code><a href="../reference/visualize_documents_2d.html">visualize_documents_2d()</a></code> function with richer labeling options was added to the already existing ones for document visualization (<code><a href="../reference/visualize_documents.html">visualize_documents()</a></code> and <code><a href="../reference/visualize_documents_3d.html">visualize_documents_3d()</a></code>).</li>
+<li>The <code><a href="../reference/visualize_documents_3d.html">visualize_documents_3d()</a></code> function also includes improved labeling options than in previous versions.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.3" id="bertopicr-033">bertopicr 0.3.3<a class="anchor" aria-label="anchor" href="#bertopicr-033"></a></h2>
+<ul><li>The update of the <code>Python</code> package <code>BERTopic</code> to version 0.17.4 and its dependencies introduced conflicts with certain <code>R</code> packages. Avoid attaching <code>R</code> libraries like <code>arrow</code> or <code>plotly</code> to the workflow.</li>
+<li>Due to the update of the <code>Python</code> package <code>BERTopic</code> and its dependencies, it is recommended to load the <code>Python</code> packages <code>BERTopic</code> and <code>sentence-transformers</code> before certain <code>R</code> libraries, e.g., <code>readr_rds()</code>.</li>
+<li>The <code>README.md</code> file was rewritten for easier understanding of the installation options and requirements.</li>
+<li>A <code>vignette</code> was added (alongside the <code>Quarto</code> tutorial and the pre-computed <code>HTML</code> file).</li>
+<li>Setup of a <code>pkgdown</code> website on <code>Github</code> (<a href="https://tpetric7.github.io/bertopicr" class="uri">https://tpetric7.github.io/bertopicr</a>) and another website on <code>Netlify</code> (<a href="https://bertopicr.netlify.app/" class="external-link uri">https://bertopicr.netlify.app/</a>).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.2" id="bertopicr-032">bertopicr 0.3.2<a class="anchor" aria-label="anchor" href="#bertopicr-032"></a></h2>
+<ul><li>If you update the <code>Python</code> package <code>BERTopic</code> to version <code>0.17.0</code>, you might have to update other packages as well or (like myself) to create a new virtual environment with compatible packages.</li>
 <li>After updating to <code>BERTopic=0.17.0</code>, you might experience that the <code><a href="../reference/visualize_documents.html">visualize_documents()</a></code> function doesn’t render the dots in the scatterplot. A simple <strong>temporary fix</strong> is to open the <code>Python</code> file <code>_documents.py</code> of the <code><a href="../reference/visualize_documents.html">visualize_documents()</a></code> function of<code>BERTopic</code> (on my <code>Windows</code> system it sits in <code>anaconda3\envs\bertopic\Lib\site-packages\bertopic\plotting\</code>) and change <code>go.Scattergl</code> to <code>go.Scatter</code> in the <code>fig.add_trace()</code> function (it occurs twice in the <code>Python</code> script).</li>
 </ul></div>
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.1" id="bertopicr-031">bertopicr 0.3.1<a class="anchor" aria-label="anchor" href="#bertopicr-031"></a></h2>
+<ul><li>Added <code>.onload()</code> function to allow <code>MacOS</code> users to import <code>BERTopic</code> and other installed <code>Python</code> modules from the virtual environment.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="bertopicr-030">bertopicr 0.3.0<a class="anchor" aria-label="anchor" href="#bertopicr-030"></a></h2>
+<ul><li>The <code>R</code> package <code>bertopicr</code> became functional equivalent with many of the popular functions of the <code>Python</code> <code>BERTopic</code> package. For easier memorization, the functions names are (nearly) identical to those of the <code>Python</code> package <code>BERTopic</code>.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1" id="bertopicr-01">bertopicr 0.1<a class="anchor" aria-label="anchor" href="#bertopicr-01"></a></h2>
+<ul><li>A preliminary collection of <code>R</code> wrapping functions of the <code>Python</code> <code>BERTopic</code> package and a tutorial for <code>R</code> users.</li>
+</ul></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
