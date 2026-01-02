@@ -16,8 +16,14 @@
   : Get Topic DataFrame Function
 - [`get_topic_info_df()`](https://tpetric7.github.io/bertopicr/reference/get_topic_info_df.md)
   : Get Topic Information DataFrame
+- [`load_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.md)
+  : Load a BERTopic Model Bundle
+- [`save_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.md)
+  : Save a BERTopic Model Bundle
 - [`setup_python_environment()`](https://tpetric7.github.io/bertopicr/reference/setup_python_environment.md)
   : Set Up Python Environment for BERTopic
+- [`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
+  : Train a BERTopic Model
 - [`visualize_barchart()`](https://tpetric7.github.io/bertopicr/reference/visualize_barchart.md)
   : Visualize BERTopic Bar Chart
 - [`visualize_distribution()`](https://tpetric7.github.io/bertopicr/reference/visualize_distribution.md)

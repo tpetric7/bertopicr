@@ -7,13 +7,13 @@
 
 ## Citation
 
-Petrič T (2025). *bertopicr: Topic Modeling Package*. R package version
-0.3.4, <https://tpetric7.github.io/bertopicr/>.
+Petrič T (2026). *bertopicr: Topic Modeling Package*. R package version
+0.3.5, <https://tpetric7.github.io/bertopicr/>.
 
     @Manual{,
       title = {bertopicr: Topic Modeling Package},
       author = {Teodor Petrič},
-      year = {2025},
-      note = {R package version 0.3.4},
+      year = {2026},
+      note = {R package version 0.3.5},
       url = {https://tpetric7.github.io/bertopicr/},
     }

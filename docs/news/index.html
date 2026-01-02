@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bertopicr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,9 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/topics_spiegel.html">Topic Modeling with BERTopic in R using reticulate and local LLMs</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/load_and_reuse_model.html">Load and Reuse a BERTopic Model</a></li>
+    <li><a class="dropdown-item" href="../articles/topics_spiegel.html">Topic Modeling with BERTopic in R using reticulate and local LLMs</a></li>
+    <li><a class="dropdown-item" href="../articles/train_and_save_model.html">Train and Save a BERTopic Model</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -35,6 +37,14 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.5" id="bertopicr-035">bertopicr 0.3.5<a class="anchor" aria-label="anchor" href="#bertopicr-035"></a></h2>
+<ul><li>Added <code><a href="../reference/setup_python_environment.html">setup_python_environment()</a></code> helper for reticulate setup.</li>
+<li>Added <code><a href="../reference/train_bertopic_model.html">train_bertopic_model()</a></code> helper for end-to-end model training.</li>
+<li>Added <code><a href="../reference/save_bertopic_model.html">save_bertopic_model()</a></code> and <code><a href="../reference/load_bertopic_model.html">load_bertopic_model()</a></code> to persist and reload models with extras.</li>
+<li>Added vignettes <code>train_and_save_model.Rmd</code> and <code>load_and_reuse_model.Rmd</code>.</li>
+<li>Added demo script <code>inst/scripts/train_model_function_demo.R</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.4" id="bertopicr-034">bertopicr 0.3.4<a class="anchor" aria-label="anchor" href="#bertopicr-034"></a></h2>
 <ul><li>The <code><a href="../reference/visualize_documents_2d.html">visualize_documents_2d()</a></code> function with richer labeling options was added to the already existing ones for document visualization (<code><a href="../reference/visualize_documents.html">visualize_documents()</a></code> and <code><a href="../reference/visualize_documents_3d.html">visualize_documents_3d()</a></code>).</li>

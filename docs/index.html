@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">bertopicr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,9 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/topics_spiegel.html">Topic Modeling with BERTopic in R using reticulate and local LLMs</a></li>
+<li><a class="dropdown-item" href="articles/load_and_reuse_model.html">Load and Reuse a BERTopic Model</a></li>
+    <li><a class="dropdown-item" href="articles/topics_spiegel.html">Topic Modeling with BERTopic in R using reticulate and local LLMs</a></li>
+    <li><a class="dropdown-item" href="articles/train_and_save_model.html">Train and Save a BERTopic Model</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -55,7 +57,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="bertopicr">bertopicr<a class="anchor" aria-label="anchor" href="#bertopicr"></a>
 </h1></div>
-<p>Topic modeling in R via <code>reticulate</code> + the Python <code>BERTopic</code> ecosystem (version 0.17.x). Provides helpers for topic inspection and visualization; see the <a href="https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd" class="external-link">Quarto notebook</a> and the <a href="https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd" class="external-link">vignettes</a> for an end-to-end training workflow.</p>
+<p>Topic modeling in R via <code>reticulate</code> + the Python <code>BERTopic</code> ecosystem (version 0.17.x). Provides helpers for training, persistence, topic inspection, and visualization; see the <a href="https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd" class="external-link">Quarto notebook</a> and the <a href="https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd" class="external-link">vignettes</a> for an end-to-end workflow.</p>
 <p align="center">
 <img src="articles/images/visualize_documents.png" alt="Visualize topics in the documents" width="720"></p>
 <div class="section level2">
@@ -68,24 +70,24 @@
 <div class="section level2">
 <h2 id="python-environment-setup-pick-one">Python environment setup (pick one)<a class="anchor" aria-label="anchor" href="#python-environment-setup-pick-one"></a>
 </h2>
-<p><strong>A. Virtualenv (base Python)</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv r-bertopic</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># Windows</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">r-bertopic\Scripts\activate</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># macOS/Linux</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="bu">source</span> r-bertopic/bin/activate</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--upgrade</span> pip</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> inst/requirements.txt</span></code></pre></div>
-<p><strong>B. Conda</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> r-bertopic python=3.10</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">conda</span> activate r-bertopic</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> inst/requirements.txt</span></code></pre></div>
-<p>(Requirements are bundled at <code>inst/requirements.txt</code>. If you have a GPU, install a matching CUDA build of PyTorch in the same env, e.g. <code>pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118</code>.)</p>
-<p><strong>C. Install via reticulate (inside R)</strong></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p><strong>A. Install inside R via reticulate</strong></p>
+<p>Requires Python installed and discoverable by the R package <code>reticulate</code>. Install Python from python.org and restart R on Windows.</p>
+<p>Installation with the <code><a href="reference/setup_python_environment.html">setup_python_environment()</a></code> function:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tpetric7.github.io/bertopicr/">bertopicr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/setup_python_environment.html">setup_python_environment</a></span><span class="op">(</span></span>
+<span>  envname <span class="op">=</span> <span class="st">"r-bertopic"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"virtualenv"</span> <span class="co"># or "conda"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Point reticulate at the environment you just created</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_virtualenv</a></span><span class="op">(</span><span class="st">"r-bertopic"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># or use_condaenv("r-bertopic", required = TRUE)</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_config.html" class="external-link">py_config</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># confirm reticulate sees the chosen env</span></span></code></pre></div>
+<p>Alternatively, setup with the following lines of code:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span><span class="co"># Choose ONE of these depending on what you created</span></span>
 <span><span class="va">target_env</span> <span class="op">&lt;-</span> <span class="st">"r-bertopic"</span></span>
@@ -93,14 +95,31 @@
 <span><span class="co"># use_condaenv(target_env, required = TRUE)      # for conda</span></span>
 <span></span>
 <span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"requirements.txt"</span>, package <span class="op">=</span> <span class="st">"bertopicr"</span><span class="op">)</span></span>
+<span><span class="co"># If req is "", reinstall/upgrade the package so the file is available.</span></span>
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_install.html" class="external-link">py_install</a></span><span class="op">(</span>packages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-r"</span>, <span class="va">req</span><span class="op">)</span>, envname <span class="op">=</span> <span class="va">target_env</span>, method <span class="op">=</span> <span class="st">"auto"</span>, pip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_config.html" class="external-link">py_config</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># confirm reticulate sees the chosen env</span></span></code></pre></div>
+<p><strong>B. Virtualenv (base Python)</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv r-bertopic</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># Windows</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="ex">r-bertopic\Scripts\activate</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># macOS/Linux</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="bu">source</span> r-bertopic/bin/activate</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--upgrade</span> pip</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> inst/requirements.txt</span></code></pre></div>
+<p><strong>C. Conda</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> r-bertopic python=3.10</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="ex">conda</span> activate r-bertopic</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> inst/requirements.txt</span></code></pre></div>
+<p>(Requirements are bundled at <code>inst/requirements.txt</code>. If you have a GPU, install a matching CUDA build of PyTorch in the same env, e.g. <code>pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118</code>.)</p>
 </div>
 <div class="section level2">
 <h2 id="minimal-usage-fit--visualize">Minimal usage (fit + visualize)<a class="anchor" aria-label="anchor" href="#minimal-usage-fit--visualize"></a>
 </h2>
-<p>The package focuses on post-fit helpers. Use your preferred BERTopic training code (see the Quarto notebook for a full pipeline), then pass the Python model and outputs into these functions.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>The package includes helpers for setup, training, and persistence. You can still use your own BERTopic training code, then pass the Python model and outputs into the R helpers.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tpetric7.github.io/bertopicr/">bertopicr</a></span><span class="op">)</span></span>
 <span></span>
@@ -108,17 +127,14 @@
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_virtualenv</a></span><span class="op">(</span><span class="st">"r-bertopic"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co"># use_condaenv("r-bertopic", required = TRUE)</span></span>
 <span></span>
-<span><span class="co"># Example: fit a simple model in Python-land</span></span>
-<span><span class="va">bertopic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"bertopic"</span><span class="op">)</span></span>
-<span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"numpy"</span><span class="op">)</span></span>
-<span><span class="va">sentencetransformers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"sentence_transformers"</span><span class="op">)</span></span>
-<span><span class="va">embedder</span> <span class="op">&lt;-</span> <span class="va">sentencetransformers</span><span class="op">$</span><span class="fu">SentenceTransformer</span><span class="op">(</span><span class="st">"BAAI/bge-m3"</span><span class="op">)</span></span>
+<span><span class="co"># Example: train in R</span></span>
 <span><span class="va">texts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cats are great pets"</span>, <span class="st">"Dogs are loyal companions"</span>, <span class="st">"The stock market fluctuates"</span><span class="op">)</span></span>
-<span><span class="va">embeddings</span> <span class="op">&lt;-</span> <span class="va">embedder</span><span class="op">$</span><span class="fu">encode</span><span class="op">(</span><span class="va">texts</span>, show_progress_bar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va">bertopic</span><span class="op">$</span><span class="fu">BERTopic</span><span class="op">(</span>calculate_probabilities <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">model</span><span class="op">$</span><span class="fu">fit_transform</span><span class="op">(</span><span class="va">texts</span>, <span class="va">embeddings</span><span class="op">)</span></span>
-<span><span class="va">topics</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">topic_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/train_bertopic_model.html">train_bertopic_model</a></span><span class="op">(</span><span class="va">texts</span>, embedding_model <span class="op">=</span> <span class="st">"Qwen/Qwen3-Embedding-0.6B"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/save_bertopic_model.html">save_bertopic_model</a></span><span class="op">(</span><span class="va">topic_model</span>, <span class="st">"topic_model"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">loaded</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/load_bertopic_model.html">load_bertopic_model</a></span><span class="op">(</span><span class="st">"topic_model"</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va">loaded</span><span class="op">$</span><span class="va">model</span></span>
+<span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="va">loaded</span><span class="op">$</span><span class="va">extras</span><span class="op">$</span><span class="va">probabilities</span></span>
 <span></span>
 <span><span class="co"># Use the R helpers</span></span>
 <span><span class="fu"><a href="reference/visualize_topics.html">visualize_topics</a></span><span class="op">(</span><span class="va">model</span>, filename <span class="op">=</span> <span class="st">"intertopic_distance_map"</span>, auto_open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -127,7 +143,12 @@
 <div class="section level2">
 <h2 id="advanced-example">Advanced example<a class="anchor" aria-label="anchor" href="#advanced-example"></a>
 </h2>
-<p>See the <a href="https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd" class="external-link">vignettes</a> or the <a href="https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd" class="external-link">Quarto tutorial</a> and the<a href="https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics__spiegel.html" class="external-link">HTML document</a> for a complete workflow (training, representation models [keyBERT, ollama models, …], dimensionality reduction, clustering, and visualizations).</p>
+<p>See the <a href="https://github.com/tpetric7/bertopicr/blob/main/vignettes" class="external-link">vignettes</a> (including <code>train_and_save_model.Rmd</code> and <code>load_and_reuse_model.Rmd</code>) or the <a href="https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd" class="external-link">Quarto tutorial</a> and the<a href="https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics__spiegel.html" class="external-link">HTML document</a> for a complete workflow (training, representation models [keyBERT, ollama models, …], dimensionality reduction, clustering, and visualizations).</p>
+</div>
+<div class="section level2">
+<h2 id="scripts">Scripts<a class="anchor" aria-label="anchor" href="#scripts"></a>
+</h2>
+<p>The demo script is available at <code>inst/scripts/train_model_function_demo.R</code> and shows end-to-end training, saving, loading, and reuse.</p>
 </div>
 <div class="section level2">
 <h2 id="sample-visualizations">Sample visualizations<a class="anchor" aria-label="anchor" href="#sample-visualizations"></a>
@@ -143,12 +164,12 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p><code>BERTopic</code> is described in:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="va">@article</span>{<span class="ot">grootendorst2022bertopic</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="dt">title</span>={BERTopic: Neural topic modeling with a class-based TF-IDF procedure},</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="dt">author</span>={Grootendorst, Maarten},</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="dt">journal</span>={arXiv preprint arXiv:2203.05794},</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="dt">year</span>={2022}</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="va">@article</span>{<span class="ot">grootendorst2022bertopic</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="dt">title</span>={BERTopic: Neural topic modeling with a class-based TF-IDF procedure},</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="dt">author</span>={Grootendorst, Maarten},</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="dt">journal</span>={arXiv preprint arXiv:2203.05794},</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="dt">year</span>={2022}</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>

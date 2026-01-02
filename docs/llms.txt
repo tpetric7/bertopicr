@@ -1,12 +1,12 @@
 # bertopicr
 
 Topic modeling in R via `reticulate` + the Python `BERTopic` ecosystem
-(version 0.17.x). Provides helpers for topic inspection and
-visualization; see the [Quarto
+(version 0.17.x). Provides helpers for training, persistence, topic
+inspection, and visualization; see the [Quarto
 notebook](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd)
 and the
 [vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd)
-for an end-to-end training workflow.
+for an end-to-end workflow.
 
 ![Visualize topics in the
 documents](articles/images/visualize_documents.png)
@@ -20,7 +20,46 @@ devtools::install_github("tpetric7/bertopicr")
 
 ## Python environment setup (pick one)
 
-**A. Virtualenv (base Python)**
+**A. Install inside R via reticulate**
+
+Requires Python installed and discoverable by the R package
+`reticulate`. Install Python from python.org and restart R on Windows.
+
+Installation with the
+[`setup_python_environment()`](https://tpetric7.github.io/bertopicr/reference/setup_python_environment.md)
+function:
+
+``` r
+library(bertopicr)
+library(reticulate)
+
+setup_python_environment(
+  envname = "r-bertopic",
+  method = "virtualenv" # or "conda"
+)
+
+# Point reticulate at the environment you just created
+use_virtualenv("r-bertopic", required = TRUE)
+# or use_condaenv("r-bertopic", required = TRUE)
+py_config()  # confirm reticulate sees the chosen env
+```
+
+Alternatively, setup with the following lines of code:
+
+``` r
+library(reticulate)
+# Choose ONE of these depending on what you created
+target_env <- "r-bertopic"
+use_virtualenv(target_env, required = TRUE)      # for virtualenv
+# use_condaenv(target_env, required = TRUE)      # for conda
+
+req <- system.file("requirements.txt", package = "bertopicr")
+# If req is "", reinstall/upgrade the package so the file is available.
+py_install(packages = c("-r", req), envname = target_env, method = "auto", pip = TRUE)
+py_config()  # confirm reticulate sees the chosen env
+```
+
+**B. Virtualenv (base Python)**
 
 ``` bash
 python -m venv r-bertopic
@@ -35,7 +74,7 @@ pip install --upgrade pip
 pip install -r inst/requirements.txt
 ```
 
-**B. Conda**
+**C. Conda**
 
 ``` bash
 conda create -n r-bertopic python=3.10
@@ -47,25 +86,11 @@ pip install -r inst/requirements.txt
 install a matching CUDA build of PyTorch in the same env,
 e.g. `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`.)
 
-**C. Install via reticulate (inside R)**
-
-``` r
-library(reticulate)
-# Choose ONE of these depending on what you created
-target_env <- "r-bertopic"
-use_virtualenv(target_env, required = TRUE)      # for virtualenv
-# use_condaenv(target_env, required = TRUE)      # for conda
-
-req <- system.file("requirements.txt", package = "bertopicr")
-py_install(packages = c("-r", req), envname = target_env, method = "auto", pip = TRUE)
-py_config()  # confirm reticulate sees the chosen env
-```
-
 ## Minimal usage (fit + visualize)
 
-The package focuses on post-fit helpers. Use your preferred BERTopic
-training code (see the Quarto notebook for a full pipeline), then pass
-the Python model and outputs into these functions.
+The package includes helpers for setup, training, and persistence. You
+can still use your own BERTopic training code, then pass the Python
+model and outputs into the R helpers.
 
 ``` r
 library(reticulate)
@@ -75,17 +100,14 @@ library(bertopicr)
 use_virtualenv("r-bertopic", required = TRUE)
 # use_condaenv("r-bertopic", required = TRUE)
 
-# Example: fit a simple model in Python-land
-bertopic <- import("bertopic")
-np <- import("numpy")
-sentencetransformers <- import("sentence_transformers")
-embedder <- sentencetransformers$SentenceTransformer("BAAI/bge-m3")
+# Example: train in R
 texts <- c("Cats are great pets", "Dogs are loyal companions", "The stock market fluctuates")
-embeddings <- embedder$encode(texts, show_progress_bar = FALSE)
-model <- bertopic$BERTopic(calculate_probabilities = TRUE)
-fit <- model$fit_transform(texts, embeddings)
-topics <- fit[[1]]
-probs <- fit[[2]]
+topic_model <- train_bertopic_model(texts, embedding_model = "Qwen/Qwen3-Embedding-0.6B")
+save_bertopic_model(topic_model, "topic_model")
+
+loaded <- load_bertopic_model("topic_model")
+model <- loaded$model
+probs <- loaded$extras$probabilities
 
 # Use the R helpers
 visualize_topics(model, filename = "intertopic_distance_map", auto_open = FALSE)
@@ -95,14 +117,21 @@ visualize_distribution(model, text_id = 1, probabilities = probs, auto_open = FA
 ## Advanced example
 
 See the
-[vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes/topics_spiegel.Rmd)
-or the [Quarto
+[vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes)
+(including `train_and_save_model.Rmd` and `load_and_reuse_model.Rmd`) or
+the [Quarto
 tutorial](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd)
 and the[HTML
 document](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics__spiegel.html)
 for a complete workflow (training, representation models \[keyBERT,
 ollama models, …\], dimensionality reduction, clustering, and
 visualizations).
+
+## Scripts
+
+The demo script is available at
+`inst/scripts/train_model_function_demo.R` and shows end-to-end
+training, saving, loading, and reuse.
 
 ## Sample visualizations
 
@@ -150,8 +179,14 @@ is given to the original author.
   : Get Topic DataFrame Function
 - [`get_topic_info_df()`](https://tpetric7.github.io/bertopicr/reference/get_topic_info_df.md)
   : Get Topic Information DataFrame
+- [`load_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.md)
+  : Load a BERTopic Model Bundle
+- [`save_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.md)
+  : Save a BERTopic Model Bundle
 - [`setup_python_environment()`](https://tpetric7.github.io/bertopicr/reference/setup_python_environment.md)
   : Set Up Python Environment for BERTopic
+- [`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
+  : Train a BERTopic Model
 - [`visualize_barchart()`](https://tpetric7.github.io/bertopicr/reference/visualize_barchart.md)
   : Visualize BERTopic Bar Chart
 - [`visualize_distribution()`](https://tpetric7.github.io/bertopicr/reference/visualize_distribution.md)
@@ -177,5 +212,9 @@ is given to the original author.
 
 ### All vignettes
 
+- [Load and Reuse a BERTopic
+  Model](https://tpetric7.github.io/bertopicr/articles/load_and_reuse_model.md):
 - [Topic Modeling with BERTopic in R using reticulate and local
   LLMs](https://tpetric7.github.io/bertopicr/articles/topics_spiegel.md):
+- [Train and Save a BERTopic
+  Model](https://tpetric7.github.io/bertopicr/articles/train_and_save_model.md):

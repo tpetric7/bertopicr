@@ -1,5 +1,22 @@
 # Changelog
 
+## bertopicr 0.3.5
+
+- Added
+  [`setup_python_environment()`](https://tpetric7.github.io/bertopicr/reference/setup_python_environment.md)
+  helper for reticulate setup.
+- Added
+  [`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
+  helper for end-to-end model training.
+- Added
+  [`save_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.md)
+  and
+  [`load_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.md)
+  to persist and reload models with extras.
+- Added vignettes `train_and_save_model.Rmd` and
+  `load_and_reuse_model.Rmd`.
+- Added demo script `inst/scripts/train_model_function_demo.R`.
+
 ## bertopicr 0.3.4
 
 - The

@@ -1,7 +1,9 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://tpetric7.github.io/bertopicr/404.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/articles/index.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/articles/load_and_reuse_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/articles/topics_spiegel.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/articles/train_and_save_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/authors.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/index.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/LICENSE-text.html</loc></url>
@@ -15,7 +17,10 @@
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_topic_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_topic_info_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/index.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/setup_python_environment.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/visualize_barchart.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/visualize_distribution.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/visualize_documents.html</loc></url>

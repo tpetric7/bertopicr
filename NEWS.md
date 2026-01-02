@@ -1,3 +1,11 @@
+# bertopicr 0.3.5
+
+* Added `setup_python_environment()` helper for reticulate setup.
+* Added `train_bertopic_model()` helper for end-to-end model training.
+* Added `save_bertopic_model()` and `load_bertopic_model()` to persist and reload models with extras.
+* Added vignettes `train_and_save_model.Rmd` and `load_and_reuse_model.Rmd`.
+* Added demo script `inst/scripts/train_model_function_demo.R`.
+
 # bertopicr 0.3.4
 
 * The `visualize_documents_2d()` function with richer labeling options was added to the already existing ones for document visualization (`visualize_documents()` and `visualize_documents_3d()`). 
