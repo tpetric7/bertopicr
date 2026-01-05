@@ -30,8 +30,8 @@
 
 # bertopicr 0.3.0
 
-* The `R` package `bertopicr` became functional equivalent with many of the popular functions of the `Python` `BERTopic` package. For easier memorization, the functions names are (nearly) identical to those of the `Python` package `BERTopic`.
+* The `R` package `bertopicr` introduces training and visualization helpers to reproduce functions of the `Python` `BERTopic` package. For easier memorization, the functions names are (nearly) identical to those of the `Python` package `BERTopic`.
 
-# bertopicr 0.1
+# bertopicr 0.2
 
 * A preliminary collection of `R` wrapping functions of the `Python` `BERTopic` package and a tutorial for `R` users.
