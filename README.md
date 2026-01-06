@@ -94,7 +94,7 @@ You can install zlib with Homebrew:
 brew install zlib
 ```
 
-## Minimal usage (fit + visualize)
+## Quick Start (fit + visualize)
 
 The package includes helpers for setup, training, and persistence. You can still use your own BERTopic training code, then pass the Python model and outputs into the R helpers.
 
@@ -106,9 +106,17 @@ library(bertopicr)
 use_virtualenv("r-bertopic", required = TRUE)
 # use_condaenv("r-bertopic", required = TRUE)
 
-# Example: train in R
-texts <- c("Cats are great pets", "Dogs are loyal companions", "The stock market fluctuates")
-topic_model <- train_bertopic_model(texts, embedding_model = "Qwen/Qwen3-Embedding-0.6B")
+# Example: train in R (use a real sample to avoid tiny-N failures)
+sample_path <- system.file("extdata", "spiegel_sample.rds", package = "bertopicr")
+df <- readr::read_rds(sample_path)
+texts <- df$text_clean[seq_len(500)]
+topic_model <- train_bertopic_model(
+  texts,
+  embedding_model = "Qwen/Qwen3-Embedding-0.6B",
+  top_n_words = 3L
+)
+# Note: tiny datasets can trigger UMAP spectral warnings/errors; using a
+# realistic sample size and a smaller top_n_words avoids that.
 save_bertopic_model(topic_model, "topic_model")
 
 loaded <- load_bertopic_model("topic_model")
