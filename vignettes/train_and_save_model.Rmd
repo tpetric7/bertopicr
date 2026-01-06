@@ -23,6 +23,11 @@ library(bertopicr)
 library(readr)
 library(dplyr)
 
+# macOS: if reticulate fails to load Python libraries, run once per session.
+if (identical(Sys.info()[["sysname"]], "Darwin")) {
+  bertopicr::configure_macos_homebrew_zlib()
+}
+
 # Point reticulate at your Python environment that has BERTopic installed.
 use_virtualenv("c:/path/to/your/venv", required = TRUE)
 
@@ -45,7 +50,7 @@ docs <- df |> pull(text_clean)
 
 ## Train the model
 
-The `train_bertopic_model()` function is a convenience function. For more options / parameter finetuning, see the other vignette (topics_spiegel.Rmd) or the Quarto file (inst/extdata/topics_spiegel.qmd) and the precomputed web page (inst/extdata/topics__spiegel.html). 
+The `train_bertopic_model()` function is a convenience function. For more options / parameter finetuning, see the other vignette (topics_spiegel.Rmd) or the Quarto file (inst/extdata/topics_spiegel.qmd). 
 
 For more settings of the `train_bertopic_model()` function, check the help file.
 

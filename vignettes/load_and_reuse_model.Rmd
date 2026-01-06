@@ -22,6 +22,11 @@ library(bertopicr)
 library(readr)
 library(dplyr)
 
+# macOS: if reticulate fails to load Python libraries, run once per session.
+if (identical(Sys.info()[["sysname"]], "Darwin")) {
+  bertopicr::configure_macos_homebrew_zlib()
+}
+
 # Point reticulate at the same Python environment used for training.
 reticulate::use_virtualenv("c:/path/to/your/venv", required = TRUE)
 
@@ -86,4 +91,3 @@ visualize_topics_over_time(model = model, topics_over_time_model = extras$topics
 visualize_topics_per_class(model, extras$topics_per_class, auto_open = FALSE)
 
 ```
-

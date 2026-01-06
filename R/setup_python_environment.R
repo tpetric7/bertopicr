@@ -86,3 +86,54 @@ setup_python_environment <- function(
   message("Python environment setup complete.")
   invisible(suppressWarnings(reticulate::py_config()))
 }
+
+#' Configure Homebrew zlib on macOS
+#'
+#' Sets DYLD_FALLBACK_LIBRARY_PATH to Homebrew's zlib lib directory. This can help
+#' reticulate find compatible libraries on macOS.
+#'
+#' @param quiet Logical. If TRUE, suppresses messages.
+#' @return Logical. TRUE if the environment was updated, FALSE otherwise.
+#' @export
+configure_macos_homebrew_zlib <- function(quiet = FALSE) {
+  if (!identical(Sys.info()[["sysname"]], "Darwin")) {
+    if (!quiet) {
+      message("configure_macos_homebrew_zlib() is only needed on macOS.")
+    }
+    return(FALSE)
+  }
+
+  brew_prefix <- try(
+    system2("brew", c("--prefix", "zlib"), stdout = TRUE, stderr = TRUE),
+    silent = TRUE
+  )
+  if (inherits(brew_prefix, "try-error") || length(brew_prefix) == 0) {
+    if (!quiet) message("Homebrew not found or zlib is not installed.")
+    return(FALSE)
+  }
+
+  brew_prefix <- trimws(brew_prefix[[1]])
+  if (!nzchar(brew_prefix) || !dir.exists(brew_prefix)) {
+    if (!quiet) message("Homebrew zlib prefix not found.")
+    return(FALSE)
+  }
+
+  zlib_lib <- file.path(brew_prefix, "lib")
+  if (!dir.exists(zlib_lib)) {
+    if (!quiet) message("Homebrew zlib lib directory not found.")
+    return(FALSE)
+  }
+
+  existing <- Sys.getenv("DYLD_FALLBACK_LIBRARY_PATH", unset = "")
+  if (nzchar(existing)) {
+    paths <- strsplit(existing, ":", fixed = TRUE)[[1]]
+    if (!zlib_lib %in% paths) {
+      Sys.setenv(DYLD_FALLBACK_LIBRARY_PATH = paste(c(existing, zlib_lib), collapse = ":"))
+    }
+  } else {
+    Sys.setenv(DYLD_FALLBACK_LIBRARY_PATH = zlib_lib)
+  }
+
+  if (!quiet) message("Set DYLD_FALLBACK_LIBRARY_PATH for Homebrew zlib.")
+  TRUE
+}

@@ -79,6 +79,21 @@ pip install -r inst/requirements.txt
 
 (Requirements are bundled at `inst/requirements.txt`. If you have a GPU, install a matching CUDA build of PyTorch in the same env, e.g. `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`.)
 
+## macOS notes
+
+If reticulate fails to load Python libraries on macOS, install Homebrew `zlib` and
+set the fallback library path once per session:
+
+```r
+bertopicr::configure_macos_homebrew_zlib()
+```
+
+You can install zlib with Homebrew:
+
+```bash
+brew install zlib
+```
+
 ## Minimal usage (fit + visualize)
 
 The package includes helpers for setup, training, and persistence. You can still use your own BERTopic training code, then pass the Python model and outputs into the R helpers.
@@ -107,7 +122,7 @@ visualize_distribution(model, text_id = 1, probabilities = probs, auto_open = FA
 
 ## Advanced example
 
-See the [vignettes](https://github.com/tpetric7/bertopicr/blob/main/vignettes) (including `train_and_save_model.Rmd` and `load_and_reuse_model.Rmd`) or the [Quarto tutorial](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd) and the[HTML document](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics__spiegel.html) for a complete workflow (training, representation models [keyBERT, ollama models, ...], dimensionality reduction, clustering, and visualizations).
+See the [vignettes](https://github.com/tpetric7/bertopicr/tree/main/vignettes) (including `train_and_save_model.Rmd` and `load_and_reuse_model.Rmd`) or the [Quarto tutorial](https://github.com/tpetric7/bertopicr/blob/main/inst/extdata/topics_spiegel.qmd) for a complete workflow (training, representation models [keyBERT, ollama models, ...], dimensionality reduction, clustering, and visualizations).
 
 ## Scripts
 

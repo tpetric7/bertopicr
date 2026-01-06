@@ -1,10 +1,12 @@
 Package: bertopicr
-Title: Topic Modeling Package
+Title: Topic Modeling with BERTopic
 Version: 0.3.5
 Authors@R: 
     person("Teodor", "Petrič", , "teodor.petric@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4397-9365"))
-Description: A package to perform topic modeling and visualize results using BERTopic and other tools in R.
+Description: Provides topic modeling and visualization by interfacing with the
+    'BERTopic' Python library via 'reticulate' (Grootendorst 2022
+    <doi:10.48550/arXiv.2203.05794>).
 Imports: 
     dplyr,
     tidyr,
@@ -16,14 +18,18 @@ Imports:
     htmltools,
     readr,
     rlang
-# VignetteBuilder: quarto
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 
+    ggplot2,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tictoc,
+    wordcloud2
+SystemRequirements: Python (>= 3.8); BERTopic and Python packages:
+    sentence-transformers, umap-learn, hdbscan, scikit-learn
 Config/Needs/website: pkgdown, rmarkdown, knitr
 VignetteBuilder: knitr
 URL: https://tpetric7.github.io/bertopicr/

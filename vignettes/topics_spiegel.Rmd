@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 library(reticulate)
 
 # 1. Define the libraries you need
@@ -30,14 +30,18 @@ if (!python_ready) {
 
 ## View Pre-Computed Results
 
-**Note:** The code below requires a specific Python environment. 
-If you simply want to view the full tutorial with all interactive graphs and results, 
-run the following command in R:
+**Note:** The code below requires a specific Python environment.
+If you want to preview the outputs without running the full workflow, see the
+static snapshots below.
 
-```{r}
-# Open the pre-computed HTML tutorial in your browser
-browseURL(system.file("extdata", "topics__spiegel.html", package = "bertopicr"))
-```
+![](images/intertopic_distance_map.png)
+![](images/topics_topwords_interactive_barchart.png)
+![](images/topics_similarity_heatmap.png)
+![](images/topic_hierarchy.png)
+![](images/topics_over_time.png)
+![](images/topics_per_class.png)
+![](images/visualize_documents.png)
+![](images/visualize_documents_3d.png)
 
 
 The package `bertopicr` is based on the Python package `BERTopic` by Maarten Grootendorst (https://github.com/MaartenGr/BERTopic), which is described in his paper:
@@ -68,10 +72,15 @@ library(tibble)
 library(readr)
 library(tictoc)
 library(htmltools)
+```
 
-library(reticulate)
 ```{r setup-python, include=FALSE}
 library(reticulate)
+
+# macOS: if reticulate fails to load Python libraries, run once per session.
+if (identical(Sys.info()[["sysname"]], "Darwin")) {
+  bertopicr::configure_macos_homebrew_zlib()
+}
 
 # Try to find python, but don't crash if it's missing (e.g. on another user's machine)
 if (reticulate::py_available(initialize = TRUE)) {
