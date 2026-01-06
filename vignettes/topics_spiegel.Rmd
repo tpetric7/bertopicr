@@ -8,41 +8,61 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 library(reticulate)
+
+# Replace the path below with the path of your Python environment
+# Then uncomment the command below:
+# Tip: BERTOPICR_VENV should be the folder that contains `pyvenv.cfg`.
+# Sys.setenv(
+#   BERTOPICR_VENV = "C:/Users/teodo/Documents/R/bertopic/bertopic4r",
+#   NOT_CRAN = "true"
+# )
 
 # 1. Define the libraries you need
 required_modules <- c("bertopic", "umap", "hdbscan", "sklearn", "numpy", "plotly", "datetime", "sentence_transformers", "openai", "ollama")
 
+# macOS: if reticulate fails to load Python libraries, run once per session.
+if (identical(Sys.info()[["sysname"]], "Darwin")) {
+  bertopicr::configure_macos_homebrew_zlib()
+}
+
+# Optional: point reticulate at a user-specified virtualenv
+venv <- Sys.getenv("BERTOPICR_VENV")
+if (nzchar(venv)) {
+  venv_cfg <- file.path(venv, "pyvenv.cfg")
+  if (file.exists(venv_cfg)) {
+    reticulate::use_virtualenv(venv, required = TRUE)
+  } else {
+    message("Warning: BERTOPICR_VENV does not point to a valid virtualenv: ", venv)
+  }
+}
+
+# Try to find python, but don't crash if it's missing (e.g. on another user's machine)
+if (!reticulate::py_available(initialize = TRUE)) {
+  try(reticulate::use_python(Sys.which("python"), required = FALSE), silent = TRUE)
+}
+
 # 2. Check if they are installed
 python_ready <- tryCatch({
   # Attempt to initialize python and check modules
-  py_available(initialize = TRUE) && 
+  py_available(initialize = TRUE) &&
   all(vapply(required_modules, py_module_available, logical(1)))
 }, error = function(e) FALSE)
 
-# 3. If missing, tell Knitr to SKIP all code chunks
+# 3. Only evaluate chunks when Python is ready and NOT_CRAN is set
+run_chunks <- python_ready && identical(Sys.getenv("NOT_CRAN"), "true")
+knitr::opts_chunk$set(eval = run_chunks)
+
 if (!python_ready) {
-  knitr::opts_chunk$set(eval = FALSE)
   message("Warning: Required Python modules (bertopic, umap-learn) not found. Vignette code will not run.")
+} else {
+  message("Python environment ready: ", reticulate::py_config()$python)
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    message("Note: Set NOT_CRAN=true to run Python-dependent chunks locally.")
+  }
 }
 ```
-
-## View Pre-Computed Results
-
-**Note:** The code below requires a specific Python environment.
-If you want to preview the outputs without running the full workflow, see the
-static snapshots below.
-
-![](images/intertopic_distance_map.png)
-![](images/topics_topwords_interactive_barchart.png)
-![](images/topics_similarity_heatmap.png)
-![](images/topic_hierarchy.png)
-![](images/topics_over_time.png)
-![](images/topics_per_class.png)
-![](images/visualize_documents.png)
-![](images/visualize_documents_3d.png)
-
 
 The package `bertopicr` is based on the Python package `BERTopic` by Maarten Grootendorst (https://github.com/MaartenGr/BERTopic), which is described in his paper:
 
@@ -52,16 +72,19 @@ The package `bertopicr` is based on the Python package `BERTopic` by Maarten Gro
 
 The package `bertopicr` introduces functions to display topic model results of `BERTopic` models in `R`. The `R` package was created with the programming support of `OpenAI`'s model `GPT4o`. 
 
+**Note:** The code below requires a specific Python environment.
+If you want to preview the outputs without running the full workflow, see the
+pre-computed static snapshots in the sections below.
 
-## Environment preparation
+## Load R packages
 
-### R packages
+Python environment selection and checks are handled in the hidden setup chunk at the top of the vignette.
 
 *Load* the `R` packages below and *initialize* a `Python` environment with the `reticulate` package.
 
 By default, `reticulate` uses an isolated `Python` *virtual environment* named `r-reticulate` (cf. https://rstudio.github.io/reticulate/).
 
-The `use_python()` and the `use_virtualenv()` functions below enable you to specify an alternate `Python` environment (cf. https://rstudio.github.io/reticulate/).
+The `use_python()` and the `use_virtualenv()` functions enable you to specify an alternate `Python` environment (cf. https://rstudio.github.io/reticulate/).
 
 ```{r}
 library(dplyr)
@@ -72,41 +95,16 @@ library(tibble)
 library(readr)
 library(tictoc)
 library(htmltools)
-```
-
-```{r setup-python, include=FALSE}
-library(reticulate)
-
-# macOS: if reticulate fails to load Python libraries, run once per session.
-if (identical(Sys.info()[["sysname"]], "Darwin")) {
-  bertopicr::configure_macos_homebrew_zlib()
-}
-
-# Try to find python, but don't crash if it's missing (e.g. on another user's machine)
-if (reticulate::py_available(initialize = TRUE)) {
-  # Python is ready
-} else {
-  # Optional: Fallback or search
-  try(reticulate::use_python(Sys.which("python"), required = FALSE), silent = TRUE)
-}
-
-reticulate::py_config()
-reticulate::py_available()
-
 library(bertopicr)
 ```
 
 Avoid loading conflicting `R` libraries like `arrow` and `plotly` alongside with `Python` modules `BERTopic`, `pyarrow` and `plotly`.
 
-### Python packages
+## Python packages
 
-Before running the program chunk below, make sure to *install* all the necessary `Python` packages in a `virtual` environment or a `conda` environment (see short instructions in the README file or other tutorials online): `bertopic, numpy, scikit-learn, sentence-transformers, umap-learn, hdbscan, spacy, openai` and `datetime`. Download and install `ollama` or `lm-studio` on your computer to serve *local* language models. 
+Use `bertopicr::setup_python_environment()` (see README) to install the required Python packages and configure your environment. The hidden setup chunk at the top of this vignette checks availability and will skip Python chunks if the environment is not ready. Install `ollama` or `lm-studio` if you want to serve local language models.
 
-In `RStudio`, you can accomplish the installation of `Python` packages with `reticulate` commands: e.g., `reticulate::py_install ("bertopic", envname = "CHOOSE THE PATH YOUR PYTHON ENVIRONMENT")`. 
-
-If you are familiar working with a `terminal`, you can activate the appropriate `python` or `conda` environment and install the necessary packages (e.g., `pip install bertopic`).
-
-After environment preparation and package installation, we `import` the `Python` packages we will be using for topic modelling, most of them in the programming chunk below, other during model preparation.
+After setup, we import the Python packages used for topic modeling below.
 
 ```{r}
 # Import necessary Python modules

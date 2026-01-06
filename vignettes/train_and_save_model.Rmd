@@ -8,34 +8,82 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-```
-
-This vignette shows how to train a BERTopic model from R and persist it to disk
-along with the R-side extras (probabilities, reduced embeddings, and dynamic
-topic outputs). Set `eval = TRUE` for the chunks you want to run.
-
-## Environment setup
-
-```{r}
+knitr::opts_chunk$set(echo = TRUE)
 library(reticulate)
-library(bertopicr)
-library(readr)
-library(dplyr)
+
+# Replace the path below with the path of your Python environment
+# Then uncomment the command below:
+# Tip: BERTOPICR_VENV should be the folder that contains `pyvenv.cfg`.
+# Sys.setenv(
+#   BERTOPICR_VENV = "C:/path/to/your/venv",
+#   NOT_CRAN = "true"
+# )
+
+# 1. Define the libraries you need
+required_modules <- c("bertopic", "umap", "hdbscan", "sklearn", "numpy", "sentence_transformers", "torch")
 
 # macOS: if reticulate fails to load Python libraries, run once per session.
 if (identical(Sys.info()[["sysname"]], "Darwin")) {
   bertopicr::configure_macos_homebrew_zlib()
 }
 
-# Point reticulate at your Python environment that has BERTopic installed.
-use_virtualenv("c:/path/to/your/venv", required = TRUE)
+# Optional: point reticulate at a user-specified virtualenv
+venv <- Sys.getenv("BERTOPICR_VENV")
+if (nzchar(venv)) {
+  venv_cfg <- file.path(venv, "pyvenv.cfg")
+  if (file.exists(venv_cfg)) {
+    reticulate::use_virtualenv(venv, required = TRUE)
+  } else {
+    message("Warning: BERTOPICR_VENV does not point to a valid virtualenv: ", venv)
+  }
+}
 
-reticulate::py_config()
-reticulate::py_available()
+# Try to find python, but don't crash if it's missing (e.g. on another user's machine)
+if (!reticulate::py_available(initialize = TRUE)) {
+  try(reticulate::use_python(Sys.which("python"), required = FALSE), silent = TRUE)
+}
+
+# 2. Check if they are installed
+python_ready <- tryCatch({
+  # Attempt to initialize python and check modules
+  py_available(initialize = TRUE) &&
+    all(vapply(required_modules, py_module_available, logical(1)))
+}, error = function(e) FALSE)
+
+# 3. Only evaluate chunks when Python is ready and NOT_CRAN is set
+run_chunks <- python_ready && identical(Sys.getenv("NOT_CRAN"), "true")
+knitr::opts_chunk$set(eval = run_chunks)
+
+if (!python_ready) {
+  message("Warning: Required Python modules are not available. Vignette code will not run.")
+} else {
+  message("Python environment ready: ", reticulate::py_config()$python)
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    message("Note: Set NOT_CRAN=true to run Python-dependent chunks locally.")
+  }
+}
+```
+
+This vignette shows how to train a BERTopic model from R and persist it to disk
+along with the R-side extras (probabilities, reduced embeddings, and dynamic
+topic outputs). Set `eval = TRUE` for the chunks you want to run.
+
+## Load R packages
+
+Python environment selection and checks are handled in the hidden setup chunk at the top of the vignette.
+
+```{r}
+library(reticulate)
+library(bertopicr)
+library(readr)
+library(dplyr)
+```
+
+## GPU availability (optional)
+
+```{r}
 reticulate::py_run_string(code = "import torch
-print(torch.cuda.is_available())") # if GPU is available then TRUE else FALSE)
-
+print(torch.cuda.is_available())") # if GPU is available then TRUE else FALSE
 ```
 
 ## Load sample data
