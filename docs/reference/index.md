@@ -2,6 +2,8 @@
 
 ## All functions
 
+- [`configure_macos_homebrew_zlib()`](https://tpetric7.github.io/bertopicr/reference/configure_macos_homebrew_zlib.md)
+  : Configure Homebrew zlib on macOS
 - [`find_topics_df()`](https://tpetric7.github.io/bertopicr/reference/find_topics_df.md)
   : Find Topics DataFrame Function
 - [`get_document_info_df()`](https://tpetric7.github.io/bertopicr/reference/get_document_info_df.md)
@@ -10,12 +12,12 @@
   : Get Most Representative Documents for a Specific Topic
 - [`get_representative_docs_custom()`](https://tpetric7.github.io/bertopicr/reference/get_representative_docs_custom.md)
   : Get Representative Documents for a Specific Topic
-- [`get_topics_df()`](https://tpetric7.github.io/bertopicr/reference/get_topics_df.md)
-  : Get Topics DataFrame Function
 - [`get_topic_df()`](https://tpetric7.github.io/bertopicr/reference/get_topic_df.md)
   : Get Topic DataFrame Function
 - [`get_topic_info_df()`](https://tpetric7.github.io/bertopicr/reference/get_topic_info_df.md)
   : Get Topic Information DataFrame
+- [`get_topics_df()`](https://tpetric7.github.io/bertopicr/reference/get_topics_df.md)
+  : Get Topics DataFrame Function
 - [`load_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.md)
   : Load a BERTopic Model Bundle
 - [`save_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.md)

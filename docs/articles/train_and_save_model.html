@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bertopicr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,27 +71,28 @@ it to disk along with the R-side extras (probabilities, reduced
 embeddings, and dynamic topic outputs). Set <code>eval = TRUE</code> for
 the chunks you want to run.</p>
 <div class="section level2">
-<h2 id="environment-setup">Environment setup<a class="anchor" aria-label="anchor" href="#environment-setup"></a>
+<h2 id="load-r-packages">Load R packages<a class="anchor" aria-label="anchor" href="#load-r-packages"></a>
 </h2>
+<p>Python environment selection and checks are handled in the hidden
+setup chunk at the top of the vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tpetric7.github.io/bertopicr/">bertopicr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Point reticulate at your Python environment that has BERTopic installed.</span></span>
-<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_virtualenv</a></span><span class="op">(</span><span class="st">"c:/path/to/your/venv"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_config.html" class="external-link">py_config</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_available.html" class="external-link">py_available</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"import torch</span></span>
-<span><span class="st">print(torch.cuda.is_available())"</span><span class="op">)</span> <span class="co"># if GPU is available then TRUE else FALSE)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="gpu-availability-optional">GPU availability (optional)<a class="anchor" aria-label="anchor" href="#gpu-availability-optional"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"import torch</span></span>
+<span><span class="st">print(torch.cuda.is_available())"</span><span class="op">)</span> <span class="co"># if GPU is available then TRUE else FALSE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="load-sample-data">Load sample data<a class="anchor" aria-label="anchor" href="#load-sample-data"></a>
 </h2>
 <p>Below, the German sample dataframe is used for topic analysis.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"spiegel_sample.rds"</span>, package <span class="op">=</span> <span class="st">"bertopicr"</span><span class="op">)</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span><span class="va">sample_path</span><span class="op">)</span></span>
 <span><span class="va">docs</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">text_clean</span><span class="op">)</span></span></code></pre></div>
@@ -102,11 +103,10 @@ the chunks you want to run.</p>
 <p>The <code><a href="../reference/train_bertopic_model.html">train_bertopic_model()</a></code> function is a convenience
 function. For more options / parameter finetuning, see the other
 vignette (topics_spiegel.Rmd) or the Quarto file
-(inst/extdata/topics_spiegel.qmd) and the precomputed web page
-(inst/extdata/topics__spiegel.html).</p>
+(inst/extdata/topics_spiegel.qmd).</p>
 <p>For more settings of the <code><a href="../reference/train_bertopic_model.html">train_bertopic_model()</a></code>
 function, check the help file.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">topic_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/train_bertopic_model.html">train_bertopic_model</a></span><span class="op">(</span></span>
 <span>  docs <span class="op">=</span> <span class="va">docs</span>,</span>
 <span>  top_n_words <span class="op">=</span> <span class="fl">50L</span>, <span class="co"># set integer numbger of top words</span></span>
@@ -126,7 +126,7 @@ BERTopic model,please make sure that the environments in which you save
 and load the model are <strong>exactly</strong> the same. The version of
 BERTopic,its dependencies, and python need to remain the same.</p>
 </blockquote>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/save_bertopic_model.html">save_bertopic_model</a></span><span class="op">(</span><span class="va">topic_model</span>, <span class="st">"topic_model"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

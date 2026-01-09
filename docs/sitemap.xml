@@ -1,21 +1,22 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://tpetric7.github.io/bertopicr/404.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/LICENSE-text.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/LICENSE.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/articles/index.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/articles/load_and_reuse_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/articles/topics_spiegel.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/articles/train_and_save_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/authors.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/index.html</loc></url>
-<url><loc>https://tpetric7.github.io/bertopicr/LICENSE-text.html</loc></url>
-<url><loc>https://tpetric7.github.io/bertopicr/LICENSE.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/news/index.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/reference/configure_macos_homebrew_zlib.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/find_topics_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_document_info_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_most_representative_docs.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_representative_docs_custom.html</loc></url>
-<url><loc>https://tpetric7.github.io/bertopicr/reference/get_topics_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_topic_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/get_topic_info_df.html</loc></url>
+<url><loc>https://tpetric7.github.io/bertopicr/reference/get_topics_df.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/index.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.html</loc></url>
 <url><loc>https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.html</loc></url>

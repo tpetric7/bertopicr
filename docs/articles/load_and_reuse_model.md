@@ -4,21 +4,23 @@ This vignette shows how to load a previously saved BERTopic model in a
 new session and reuse the extras stored alongside it. Set `eval = TRUE`
 for the chunks you want to run.
 
-## Environment setup
+## Load R packages
+
+Python environment selection and checks are handled in the hidden setup
+chunk at the top of the vignette.
 
 ``` r
 library(reticulate)
 library(bertopicr)
 library(readr)
 library(dplyr)
+```
 
-# Point reticulate at the same Python environment used for training.
-reticulate::use_virtualenv("c:/path/to/your/venv", required = TRUE)
+## GPU availability (optional)
 
-reticulate::py_config()
-reticulate::py_available()
+``` r
 reticulate::py_run_string(code = "import torch
-print(torch.cuda.is_available())") # if GPU is available then TRUE else FALSE)
+print(torch.cuda.is_available())") # if GPU is available then TRUE else FALSE
 ```
 
 ## Load the model bundle

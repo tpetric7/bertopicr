@@ -1,16 +1,5 @@
 # Topic Modeling with BERTopic in R using reticulate and local LLMs
 
-## View Pre-Computed Results
-
-**Note:** The code below requires a specific Python environment. If you
-simply want to view the full tutorial with all interactive graphs and
-results, run the following command in R:
-
-``` r
-# Open the pre-computed HTML tutorial in your browser
-browseURL(system.file("extdata", "topics__spiegel.html", package = "bertopicr"))
-```
-
 The package `bertopicr` is based on the Python package `BERTopic` by
 Maarten Grootendorst (<https://github.com/MaartenGr/BERTopic>), which is
 described in his paper:
@@ -20,13 +9,21 @@ described in his paper:
 > Maarten Grootendorst, 2022.  
 > Available at: [arXiv:2203.05794](https://arxiv.org/abs/2203.05794)
 
-The package `bertopicr` introduces functions to display topic model
-results of `BERTopic` models in `R`. The `R` package was created with
-the programming support of `OpenAI`’s model `GPT4o`.
+The package `bertopicr` introduces functions to train and display topic
+model results of `BERTopic` models in `R`. The `R` package was created
+with the programming support of `OpenAI`’s large language models.
 
-## Environment preparation
+**Note:** The code below requires a specific Python environment. If you
+want to preview the outputs without running the full workflow, see the
+pre-computed static snapshots in the sections below. For a shorter
+workflow and model persistence helpers, see the vignettes
+`train_and_save_model.Rmd` and `load_and_reuse_model.Rmd`, and the
+updated README.
 
-### R packages
+## Load R packages
+
+Python environment selection and checks are handled in the hidden setup
+chunk at the top of the vignette.
 
 *Load* the `R` packages below and *initialize* a `Python` environment
 with the `reticulate` package.
@@ -38,7 +35,7 @@ The
 [`use_python()`](https://rstudio.github.io/reticulate/reference/use_python.html)
 and the
 [`use_virtualenv()`](https://rstudio.github.io/reticulate/reference/use_python.html)
-functions below enable you to specify an alternate `Python` environment
+functions enable you to specify an alternate `Python` environment
 (cf. <https://rstudio.github.io/reticulate/>).
 
 ``` r
@@ -50,34 +47,34 @@ library(tibble)
 library(readr)
 library(tictoc)
 library(htmltools)
-
-library(reticulate)
+library(bertopicr)
 ```
 
-Avoid loading conflicting `R` libraries like `arrow` and `plotly`
-alongside with `Python` modules `BERTopic`, `pyarrow` and `plotly`.
+*Note*: Avoid loading conflicting `R` libraries (like `arrow`) alongside
+with `Python` modules `BERTopic`, `pyarrow` and `plotly`.
 
-### Python packages
+*Note*: If you prefer a streamlined setup,
+[`setup_python_environment()`](https://tpetric7.github.io/bertopicr/reference/setup_python_environment.md)
+(see README) can install the Python dependencies. The helper functions
+[`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md),
+[`save_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/save_bertopic_model.md),
+and
+[`load_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/load_bertopic_model.md)
+are showcased in `train_and_save_model.Rmd` and
+`load_and_reuse_model.Rmd`.
 
-Before running the program chunk below, make sure to *install* all the
-necessary `Python` packages in a `virtual` environment or a `conda`
-environment (see short instructions in the README file or other
-tutorials online):
-`bertopic, numpy, scikit-learn, sentence-transformers, umap-learn, hdbscan, spacy, openai`
-and `datetime`. Download and install `ollama` or `lm-studio` on your
-computer to serve *local* language models.
+## Python packages
 
-In `RStudio`, you can accomplish the installation of `Python` packages
-with `reticulate` commands: e.g.,
-`reticulate::py_install ("bertopic", envname = "CHOOSE THE PATH YOUR PYTHON ENVIRONMENT")`.
+Use
+[`bertopicr::setup_python_environment()`](https://tpetric7.github.io/bertopicr/reference/setup_python_environment.md)
+(see README) to install the required Python packages and configure your
+environment. The hidden setup chunk at the top of this vignette checks
+availability and will skip Python chunks if the environment is not
+ready. Install `ollama` or `lm-studio` if you want to serve local
+language models.
 
-If you are familiar working with a `terminal`, you can activate the
-appropriate `python` or `conda` environment and install the necessary
-packages (e.g., `pip install bertopic`).
-
-After environment preparation and package installation, we `import` the
-`Python` packages we will be using for topic modelling, most of them in
-the programming chunk below, other during model preparation.
+After setup, we import the Python packages used for topic modeling
+below.
 
 ``` r
 # Import necessary Python modules
@@ -109,8 +106,8 @@ dim(dataset)
 ```
 
 The collected `stopword` list includes German and English tokens and
-will be inserted into `Python`’s `CountVectorizer` before `TF-IDF`
-calculation. The language model will process the text chunks in the
+will be inserted into `Python`’s `CountVectorizer` before `c-TF-IDF`
+calculation. But the embedding model will process the text chunks in the
 *text_clean* column before `stopword` removal.
 
 ``` r
@@ -144,7 +141,7 @@ The Topic model preparation will also include *local* language models
 `SentenceTransformer` creates the necessary *embeddings* (vector
 representations of text tokens) for topic modeling with `bertopic`. The
 first time `SentenceTransformer` is used with a specific model, the
-model has to been downloaded from the `huggingface` website
+model has to be downloaded from the `huggingface` website
 (<https://huggingface.co/>), where many freely usable language models
 are hosted (<https://huggingface.co/models>).
 
@@ -190,7 +187,7 @@ The `Countvectorizer` calculates the `c-TF-IDF` frequencies and enables
 the `representation model` defined below to extract suitable keywords as
 descriptors of the extracted topics.
 
-`Stopwords` are removed *after* creating `embeddings`, but *before*
+`Stopwords` are removed *after* `embeddings` creation, but *before*
 `keyword` extraction. Stopword removal is accomplished with the
 `CountVectorizer` method.
 
@@ -208,11 +205,25 @@ sentence_vectors_dense <- py_to_r(sentence_vectors_dense)
 
 In the example below, *multiple representation models* are used for
 keyword extraction from the identified topics and topic description:
-`keyBERT` (part of `bertopic`), a language model (served locally by
+`keyBERT` (part of `BERTopic`), a language model (served locally by
 `ollama` via the `OpenAI` endpoint, but it is also possible to use
 models from `Groq` or other providers), a Maximal Marginal Relevance
 model (`MMR`) and a `spacy` `POS` representation model. By default, only
-one Representation model is created by `bertopic`.
+one representation model is created by `bertopic`.
+
+Before running the following chunk, make sure that all representation
+models are downloaded and installed and set
+`BERTOPICR_ENABLE_REPR=true`. Otherwise, comment those representation
+models out that are missing or won’t be used in the topic training
+pipeline. If you want a minimal workflow, use
+[`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
+instead (see `train_and_save_model.Rmd`).
+
+*Note*: If you use the
+[`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
+helper (see *Quick Start* section in *Readme.md* and the vignette
+*load_and_reuse.Rmd*) instead of the procedure in this notebook, you can
+include only one representation model (*default = “none”*).
 
 ``` r
 # Initialize representation models
@@ -237,7 +248,7 @@ topic: <topic label>
 
 # download an appropriate LLM to be hosted by ollama or lm-studio
 openai_model <- bertopic$representation$OpenAI(client, 
-                                               model = "ministral-3:14b",
+                                               model = "gpt-oss:20b", 
                                                exponential_backoff = TRUE, 
                                                chat = TRUE, 
                                                prompt = prompt)
@@ -476,7 +487,7 @@ barchart <- topics_df |>
   facet_wrap(~ Topic, scales = "free") +
   theme(legend.position = "none")
 
-# # Disabled to avoid conflicts
+# # Disabled to avoid poential conflicts
 # library(plotly)
 # ggplotly(barchart)
 ```

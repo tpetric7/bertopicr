@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bertopicr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,26 +70,27 @@
 a new session and reuse the extras stored alongside it. Set
 <code>eval = TRUE</code> for the chunks you want to run.</p>
 <div class="section level2">
-<h2 id="environment-setup">Environment setup<a class="anchor" aria-label="anchor" href="#environment-setup"></a>
+<h2 id="load-r-packages">Load R packages<a class="anchor" aria-label="anchor" href="#load-r-packages"></a>
 </h2>
+<p>Python environment selection and checks are handled in the hidden
+setup chunk at the top of the vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tpetric7.github.io/bertopicr/">bertopicr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Point reticulate at the same Python environment used for training.</span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_virtualenv</a></span><span class="op">(</span><span class="st">"c:/path/to/your/venv"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_config.html" class="external-link">py_config</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_available.html" class="external-link">py_available</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"import torch</span></span>
-<span><span class="st">print(torch.cuda.is_available())"</span><span class="op">)</span> <span class="co"># if GPU is available then TRUE else FALSE)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="gpu-availability-optional">GPU availability (optional)<a class="anchor" aria-label="anchor" href="#gpu-availability-optional"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"import torch</span></span>
+<span><span class="st">print(torch.cuda.is_available())"</span><span class="op">)</span> <span class="co"># if GPU is available then TRUE else FALSE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="load-the-model-bundle">Load the model bundle<a class="anchor" aria-label="anchor" href="#load-the-model-bundle"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">loaded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_bertopic_model.html">load_bertopic_model</a></span><span class="op">(</span><span class="st">"topic_model"</span><span class="op">)</span> <span class="co"># set the location of the model!</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va">loaded</span><span class="op">$</span><span class="va">model</span></span>
 <span><span class="va">extras</span> <span class="op">&lt;-</span> <span class="va">loaded</span><span class="op">$</span><span class="va">extras</span></span></code></pre></div>
@@ -97,7 +98,7 @@ a new session and reuse the extras stored alongside it. Set
 <div class="section level2">
 <h2 id="load-data-for-inspection">Load data for inspection<a class="anchor" aria-label="anchor" href="#load-data-for-inspection"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"spiegel_sample.rds"</span>, package <span class="op">=</span> <span class="st">"bertopicr"</span><span class="op">)</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span><span class="va">sample_path</span><span class="op">)</span></span>
 <span><span class="va">docs</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">text_clean</span><span class="op">)</span></span></code></pre></div>
@@ -105,7 +106,7 @@ a new session and reuse the extras stored alongside it. Set
 <div class="section level2">
 <h2 id="create-tables-from-the-loaded-model">Create tables from the loaded model<a class="anchor" aria-label="anchor" href="#create-tables-from-the-loaded-model"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doc_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_document_info_df.html">get_document_info_df</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, texts <span class="op">=</span> <span class="va">docs</span><span class="op">)</span></span>
 <span><span class="va">topic_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_topic_info_df.html">get_topic_info_df</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
 <span><span class="va">topics_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_topics_df.html">get_topics_df</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span></code></pre></div>
@@ -113,7 +114,7 @@ a new session and reuse the extras stored alongside it. Set
 <div class="section level2">
 <h2 id="use-extras-and-visualizations">Use extras and visualizations<a class="anchor" aria-label="anchor" href="#use-extras-and-visualizations"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/visualize_barchart.html">visualize_barchart</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, filename <span class="op">=</span> <span class="st">"barchart_demo"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/visualize_distribution.html">visualize_distribution</a></span><span class="op">(</span></span>
 <span>  model <span class="op">=</span> <span class="va">model</span>,</span>
@@ -123,14 +124,14 @@ a new session and reuse the extras stored alongside it. Set
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/visualize_heatmap.html">visualize_heatmap</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, filename <span class="op">=</span> <span class="st">"vis_heat_demo"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/visualize_topics.html">visualize_topics</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, filename <span class="op">=</span> <span class="st">"dist_map_demo"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/visualize_documents.html">visualize_documents</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, <span class="va">docs</span>, reduced_embeddings <span class="op">=</span> <span class="va">extras</span><span class="op">$</span><span class="va">reduced_embeddings_2d</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/visualize_documents_2d.html">visualize_documents_2d</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, <span class="va">docs</span>, reduced_embeddings <span class="op">=</span> <span class="va">extras</span><span class="op">$</span><span class="va">reduced_embeddings_2d</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/visualize_documents_3d.html">visualize_documents_3d</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, <span class="va">docs</span>, reduced_embeddings <span class="op">=</span> <span class="va">extras</span><span class="op">$</span><span class="va">reduced_embeddings_3d</span><span class="op">)</span></span></code></pre></div>
 <p>The following visualizations work only if <em>topics_over_time</em>
 and <em>topics_per_class</em> were defined after model training or
 within the <code><a href="../reference/train_bertopic_model.html">train_bertopic_model()</a></code> function.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/visualize_topics_over_time.html">visualize_topics_over_time</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span>, topics_over_time_model <span class="op">=</span> <span class="va">extras</span><span class="op">$</span><span class="va">topics_over_time</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/visualize_topics_per_class.html">visualize_topics_per_class</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">extras</span><span class="op">$</span><span class="va">topics_per_class</span>, auto_open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>

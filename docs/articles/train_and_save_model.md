@@ -5,21 +5,23 @@ to disk along with the R-side extras (probabilities, reduced embeddings,
 and dynamic topic outputs). Set `eval = TRUE` for the chunks you want to
 run.
 
-## Environment setup
+## Load R packages
+
+Python environment selection and checks are handled in the hidden setup
+chunk at the top of the vignette.
 
 ``` r
 library(reticulate)
 library(bertopicr)
 library(readr)
 library(dplyr)
+```
 
-# Point reticulate at your Python environment that has BERTopic installed.
-use_virtualenv("c:/path/to/your/venv", required = TRUE)
+## GPU availability (optional)
 
-reticulate::py_config()
-reticulate::py_available()
+``` r
 reticulate::py_run_string(code = "import torch
-print(torch.cuda.is_available())") # if GPU is available then TRUE else FALSE)
+print(torch.cuda.is_available())") # if GPU is available then TRUE else FALSE
 ```
 
 ## Load sample data
@@ -38,8 +40,7 @@ The
 [`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
 function is a convenience function. For more options / parameter
 finetuning, see the other vignette (topics_spiegel.Rmd) or the Quarto
-file (inst/extdata/topics_spiegel.qmd) and the precomputed web page
-(inst/extdata/topics\_\_spiegel.html).
+file (inst/extdata/topics_spiegel.qmd).
 
 For more settings of the
 [`train_bertopic_model()`](https://tpetric7.github.io/bertopicr/reference/train_bertopic_model.md)
