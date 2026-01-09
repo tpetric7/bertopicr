@@ -1,3 +1,7 @@
+# bertopicr 0.3.6
+
+* Documentation & Vignette fixes and bump version to 0.3.6
+
 # bertopicr 0.3.5
 
 * Added `setup_python_environment()` helper for reticulate setup.
