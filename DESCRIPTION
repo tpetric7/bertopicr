@@ -1,11 +1,11 @@
 Package: bertopicr
-Title: Topic Modeling with BERTopic
+Title: Topic Modeling with 'BERTopic'
 Version: 0.3.6
 Authors@R: 
     person("Teodor", "Petrič", , "teodor.petric@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4397-9365"))
 Description: Provides topic modeling and visualization by interfacing with the
-    'BERTopic' Python library via 'reticulate' (Grootendorst 2022
+    'BERTopic' library for 'Python' via 'reticulate' (Grootendorst 2022
     <doi:10.48550/arXiv.2203.05794>).
 Imports: 
     dplyr,
